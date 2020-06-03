@@ -1,0 +1,4 @@
+Tile Properties and Effects
+    spawn - spawns an entity (will later use the string to get the entity name)
+    camera - camera will follow an entity spawned here
+    inputAffected - input affecs an entity spawned here

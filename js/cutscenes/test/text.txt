@@ -1,0 +1,12 @@
+presets {
+    "flo": {
+    	"annoyed" : ["mouth1", "eyes1"]
+	}
+
+
+}
+
+var delimiter = "@";
+
+
+text=""" fuck js why can't you have freakin' sane multiline detection"""

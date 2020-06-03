@@ -1,0 +1,11 @@
+Cutscenes Module
+Menus
+
+Check camera for bigger maps
+
+fork over to MC prototyper 
+
+scene switching
+ possibly give input handling to a class of entity called controllable, then make green Entity inhertif from that
+more than one tmx
+auto loadImages
