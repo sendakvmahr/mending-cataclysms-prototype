@@ -24,15 +24,34 @@ function()
 		"PharHome": {
 			"name": "PharHome",
 			"image": "tileset_Phar_Room_test.png",
-			"width": "768",
-			"height": "768",
+			"width": "384",
+			"height": "384",
 			"tilecount": "256",
 			"properties": [
 				{
-					"id" : "164",
+					"id" : "9",
 					"camera" : "true",
 					"inputAffected" : "true",
+					"name" : "Sonna",
 					"spawn" : "PlayableEntity"
+				},
+				{
+					"id" : "41",
+					"camera" : "false",
+					"inputAffected" : "false",
+					"name" : "Pharynx",
+					"spawn" : "PlayableEntity"
+				},
+				{
+					"id" : "44",
+					"camera" : "false",
+					"inputAffected" : "false",
+					"name" : "Florence",
+					"spawn" : "PlayableEntity"
+				},
+				{
+					"id" : "104",
+					"spawn" : "ProjectileEnemy"
 				}
 			]
 		},

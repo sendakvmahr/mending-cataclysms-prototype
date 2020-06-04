@@ -16,10 +16,10 @@ function(goody, Vector, vars)
         // holds the tileset information.
         this.tileset = {};
         this.tilesetInfo = [];
-        var tilecount = 0;
-        var keys = Object.keys(tilesets);
-        for (var i = 0; i < keys.length; i++) {
-            var name = keys[i];
+        let tilecount = 0;
+        let keys = Object.keys(tilesets);
+        for (let i = 0; i < keys.length; i++) {
+            let name = keys[i];
             tilecount += parseInt(tilesets[keys[i]].tilecount);
             this.tileset[name] = tilesets[keys[i]];
             this.tilesetInfo.push([tilecount, name]);
@@ -31,11 +31,11 @@ function(goody, Vector, vars)
         this.eventMap = [];
         this.collisionMap = [];
 
-        var layers = json.layers;
-        var items = Object.keys(layers);
+        let layers = json.layers;
+        let items = Object.keys(layers);
         this.length = json.layers[items[0]].length;
-        for (var i = 0; i < items.length; i++) {
-            var name = items[i];
+        for (let i = 0; i < items.length; i++) {
+            let name = items[i];
 
             // Tile layer that's rendered
             if (goody.stringContains(name, "Map")) {
@@ -59,24 +59,23 @@ function(goody, Vector, vars)
             }
         }
     }
-
     Map.prototype.spawnEntities = function(entityLayer, tilesets){
         // looks through teh map data and decides which enemies to spawn where
-        var properties = {};
+        let properties = {};
         let keys = Object.keys(tilesets);
-        for (var i = 0; i < keys.length; i++) {
-            for (var p = 0; p < tilesets[keys[i]].properties.length; p++) {
-                var props = tilesets[keys[i]].properties[p];
+        for (let i = 0; i < keys.length; i++) {
+            for (let p = 0; p < tilesets[keys[i]].properties.length; p++) {
+                let props = tilesets[keys[i]].properties[p];
                 if ("spawn" in props) {
                     properties[props.id] = props;
                 }
             }
         }
-        for (var i = 0; i < entityLayer.length; i++) {
-            var to_check = entityLayer[i]-1;
+        for (let i = 0; i < entityLayer.length; i++) {
+            let to_check = entityLayer[i]-1;
             if (to_check in properties) { // may be messy?
                 this.objects.push({});
-                var index = this.objects.length-1;
+                let index = this.objects.length-1;
                 Object.assign(this.objects[index], properties[to_check.toString()])
                 this.objects[index].spawntile = i;
             }

@@ -9,8 +9,6 @@ function(Animation, Entity, Vector, goody, vars)
         this._accel = 1.5;
         this._velCap = 3;
         this._friction = .7;
-        this._floatOffset = 0;        // image offsets as a result of flying and sinking
-        this._targetFloatOffset = 0;  // target image offset at min/max height
         // HERE FOR REFERENCE FOR LATER
         //this._sprite = new Animation.Animation(images.MC, 1, 24, 48);
         //this._shadowSprite = new Animation.Animation(images.MCshadow, 1, 20, 8);

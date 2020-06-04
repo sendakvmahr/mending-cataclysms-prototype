@@ -2,15 +2,22 @@ define([
 	"entities/Entity", 
 	"entities/GreenEntity",
 	"entities/Cursor",
-	"entities/PlayableEntity"
+	"entities/PlayableEntity",
+	"entities/PlayableEntitySonna",
+	"entities/ProjectileEnemy",
+	"entities/Projectile",
 	],
 function(
 	Entity, 
 	GreenEntity, 
 	Cursor,
-	PlayableEntity)
+	PlayableEntity,
+	PlayableEntitySonna,
+	ProjectileEnemy,
+	Projectile)
 {    
-    function EntityMaker(entityName, entityLocation) {
+    function EntityMaker(entity, entityLocation) {
+    let entityName = entity.spawn;
 	switch(entityName) {
 		case "Entity":
 			return new Entity.Entity(entityLocation.x, entityLocation.y)
@@ -19,7 +26,12 @@ function(
 		case "Cursor":
 			return new Cursor.Cursor(entityLocation.x, entityLocation.y)
 		case "PlayableEntity":
-			return new PlayableEntity.PlayableEntity(entityLocation.x, entityLocation.y, "Sonna")
+			if (entity.name === "Sonna") {
+				return new PlayableEntitySonna.PlayableEntitySonna(entityLocation.x, entityLocation.y)
+			}
+			return new PlayableEntity.PlayableEntity(entityLocation.x, entityLocation.y, entity.name)
+		case "ProjectileEnemy":
+			return new ProjectileEnemy.ProjectileEnemy(entityLocation.x, entityLocation.y)
 		default:
 			return new Entity.Entity(entityLocation.x, entityLocation.y)
 		} 

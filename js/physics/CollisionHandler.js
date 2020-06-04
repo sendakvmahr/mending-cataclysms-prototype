@@ -5,12 +5,12 @@ function(goody)
 
     CollisionHandler.prototype.collidingTiles = function(map, rect) {
         // Given a rect, find out which tiles it is on
-        var points = rect.getCorners();
+        let points = rect.getCorners();
         // THIS HAS A CHANCE OF RETURNING THE SAME TILE TWICE 
         // IF HTE OBJECT IS SMALLER THAN A TILE
-        var result = [];
-        for (var i=0; i<4; i++) {
-            var tile = map.pixelToTile(points[i]);
+        let result = [];
+        for (let i=0; i<4; i++) {
+            let tile = map.pixelToTile(points[i]);
             if (!goody.inArray(result, tile)) {
                  result.push(tile);
             }

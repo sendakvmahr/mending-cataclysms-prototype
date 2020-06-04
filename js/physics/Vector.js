@@ -23,9 +23,9 @@ function(goody)
 
     Vector.prototype.length = function() {
         // Magnitude of the vector
-        var x = this.x;
-        var y = this.y;
-        var z = this.z;
+        let x = this.x;
+        let y = this.y;
+        let z = this.z;
         return Math.sqrt(x * x + y * y + z * z);
     };
 

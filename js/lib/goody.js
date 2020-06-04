@@ -4,7 +4,7 @@ function()
 {    
     function arrayEquals(a1, a2) {
         if (a1.length === a2.length) {
-            for (var i = 0; i < a1.length; i++) {
+            for (let i = 0; i < a1.length; i++) {
                 if (a1[i] !== a2[i]) {
                     return false;
                 }
@@ -27,8 +27,8 @@ function()
     
     function allSame(arr) {
         if (arr.length == 0) { return true; }
-        var val = arr[0];
-        var len = arr.length;
+        let val = arr[0];
+        let len = arr.length;
         while (len--) {
             if (arr[len] != val) { return false; }
         }
@@ -40,7 +40,7 @@ function()
     }
 
     function inArray(arr, searchFor) {
-        for (var i = 0; i < arr.length; i++){
+        for (let i = 0; i < arr.length; i++){
             if (arr[i] == searchFor) {
                 return true;
             }

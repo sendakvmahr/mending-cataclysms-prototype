@@ -1,16 +1,16 @@
-define(["display/Animation", "entities/Entity", "physics/Vector", "lib/goody", "assets/vars"],
-function(Animation, Entity, Vector, goody, vars)
+define(["display/Animation", "entities/PlayableEntity", "physics/Vector", "lib/goody", "assets/vars"],
+function(Animation, PlayableEntity, Vector, goody, vars)
 {    
-    PlayableEntity.prototype = new Entity.Entity();
-    PlayableEntity.prototype.constructor = PlayableEntity;
+    PlayableEntitySonna.prototype = new PlayableEntity.PlayableEntity();
+    PlayableEntitySonna.prototype.constructor = PlayableEntitySonna;
 
-    function PlayableEntity(x, y, name) {
-        Entity.Entity.apply(this, arguments);
+    function PlayableEntitySonna(x, y) {
+        PlayableEntity.PlayableEntity.apply(this, arguments, "Sonna");
         this._accel = 1.5;
         this._velCap = 3;
         this._friction = .7;
         // HERE FOR REFERENCE FOR LATER
-        this._sprite = new Animation.Animation(images[name], 1, 36, 108);
+        this._sprite = new Animation.Animation(images["Sonna"], 1, 36, 108);
         this._spriteOffset = new Vector.Vector(-8, -80);
         //this._shadowSprite = new Animation.Animation(images.MCshadow, 1, 20, 8);
 
@@ -18,7 +18,7 @@ function(Animation, Entity, Vector, goody, vars)
         this.rect.height = 27;
     }
 
-    PlayableEntity.prototype.update = function(input, map, collisionHandler, timeDelta) {
+    PlayableEntitySonna.prototype.update = function(input, map, collisionHandler, timeDelta) {
         // this is entirely variable by game but this is not a bad defualt
         // if moving 
         if (input.up||input.down||input.right||input.left) {
@@ -60,18 +60,18 @@ function(Animation, Entity, Vector, goody, vars)
         //this._sprite.update();
     }
 
-    PlayableEntity.prototype.drawImage = function(ctx, offset) {
+    PlayableEntitySonna.prototype.drawImage = function(ctx, offset) {
         var displayOffset = this.rect.position.add(offset);
         this._sprite.display(ctx, displayOffset.add(this._spriteOffset));
         //this.rect.draw(ctx, offset, "#00FF00");
     }
     
-    PlayableEntity.prototype._move = function(map, collisionHandler, timeDelta) {
+    PlayableEntitySonna.prototype._move = function(map, collisionHandler, timeDelta) {
         this.moveAxis("x", this.velocity.x * timeDelta/9, collisionHandler, map);
         this.moveAxis("y", this.velocity.y * timeDelta/9, collisionHandler, map);
     }
 
-    PlayableEntity.prototype.moveAxis = function(axis, distance, collisionHandler, map) {
+    PlayableEntitySonna.prototype.moveAxis = function(axis, distance, collisionHandler, map) {
         var isXaxis = axis === "x";
         var currentTiles = collisionHandler.collidingTiles(map, this.rect);
         // Move forward the right position area, then look at the tiles the rect is on
@@ -93,28 +93,7 @@ function(Animation, Entity, Vector, goody, vars)
         }
     }
 
-    PlayableEntity.prototype.moveBack = function(isXaxis, distance, newTile, map){
-        // moves the entity out of walls it has collided with
-
-        // moving right, hit left side of wall
-        if (isXaxis && distance > 0) {
-            this.rect.setRight(map.tileToPixel(newTile).x-1);
-        }
-        // moving left, hit right side of wall
-        else if (isXaxis && distance < 0) {
-            this.rect.setLeft(map.tileToPixel(newTile).x+vars.tileDimension+1);
-        }
-        // moving down, hit top side of wall
-        else if (distance > 0) {
-            this.rect.setBottom(map.tileToPixel(newTile).y-1);
-        }
-        // moving up, hit bottom side of wall
-        else {
-            this.rect.setTop(map.tileToPixel(newTile).y+vars.tileDimension+1);
-        } 
-    }
-    
     return {
-        PlayableEntity: PlayableEntity
+        PlayableEntitySonna: PlayableEntitySonna
     };
 });

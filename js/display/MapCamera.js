@@ -19,14 +19,12 @@ function(Vector, goody, vars)
         this._mapLength = map.length;
         // THIS WAS FFTP SPECIFIC, as each height element had both an effect layer and a base layer. 
         //but buffer length should be set anyways
-        var bufferLength = map.displayedLayers;
-
-        for (var i = 0; i < bufferLength; i += 2) {
+        let bufferLength = map.displayedLayers;
+        for (let i = 0; i < bufferLength; i+=1) {
             this.renderLayer(map.imageMap[i], map);
             //this.renderLayer(map.imageMap[Math.floor(i/2)], map, images.Tileset);
             //this.renderLayer(map.effectMap[Math.floor(i/2)], map, images.Tileset);
         }
-
         // Set font and color for debugging information
         this._ctx.font = "20px sans-serif";
         this._ctx.fillStyle = "#FF0000";
@@ -35,51 +33,28 @@ function(Vector, goody, vars)
     MapCamera.prototype.reloadMap = function(map) {
         // parallax, parallax, bg0, ef0, bg1, ef1, bg2, ef2
         // 0         1         2    3    4    5    6    7
-        var bufferLength = this._buffer.length;
-        for (var i = (map.parallax ? 2 : 0); i < bufferLength; i += 2) {
-            var layerNumber = i + 1;
-            var layer = map.effectMap[i/2 - (map.parallax ? 1 : 0)];
+        let bufferLength = this._buffer.length;
+        for (let i = (map.parallax ? 2 : 0); i < bufferLength; i += 2) {
+            let layerNumber = i + 1;
+            let layer = map.effectMap[i/2 - (map.parallax ? 1 : 0)];
             // console.log(i/2 - (map.parallax ? 1 : 0), layerNumber);
-            var ctx = this._buffer[layerNumber].getContext("2d");
+            let ctx = this._buffer[layerNumber].getContext("2d");
             ctx.clearRect (0, 0, map.pixelHeight, map.pixelWidth);
-           for (var n = 0; n < this._mapLength; n++) {
+           for (let n = 0; n < this._mapLength; n++) {
                this.renderTile(n, layer[n], map, ctx);
            }
         }
     }
 
-    MapCamera.prototype.renderParallaxLayer = function(parallaxImage) {
-        // As of now, parallax cannot move, and the buffer is the size of
-        //  the map, not forced to be the same size as the camera
-        var i = this._buffer.length;
-        this._buffer.push(document.createElement("canvas"));
-        this._buffer[i].width = this._mapPixelWidth;
-        this._buffer[i].height = this._mapPixelHeight;
-        var ctx = this._buffer[i].getContext("2d");
-        var image = images[parallaxImage];
-        ctx.drawImage(
-            image,                                                   //image
-            0,                                                       //x position on image
-            0,                                                       //y position on image
-            image.width,                                             //imageWidth on Source
-            image.height,                                            //imageHeight on Source
-            0,                                                       //xPosCanvas    
-            0,                                                       //yPosCanvas    
-            image.width,                                             //imageWidth on Canvas
-            image.height                                             //imageHeight on Canvas                
-        );
-    
-    }
-
     MapCamera.prototype.renderLayer = function(layer, map, image) {
         // makes a context for the layer given, renders all the tiles on the context,
         // and adds it to the camera buffer.  
-        var i = this._buffer.length;
+        let i = this._buffer.length;
         this._buffer.push(document.createElement("canvas"));
         this._buffer[i].width = this._mapPixelWidth;
         this._buffer[i].height = this._mapPixelHeight;
-        var ctx = this._buffer[i].getContext("2d");
-        for (var n = 0; n < this._mapLength; n++) {
+        let ctx = this._buffer[i].getContext("2d");
+        for (let n = 0; n < this._mapLength; n++) {
             this.renderTile(n, layer[n], map, ctx, image);
         }
     }
@@ -91,9 +66,9 @@ function(Vector, goody, vars)
     MapCamera.prototype._calcOffset = function() {
         // Calculates the displacement of the map 
         if (this._follow === 0) { return; }
-        var cwidth = vars.displayWidth;
-        var cheight = vars.displayHeight;
-        var followPos = this._follow.rect.position;
+        let cwidth = vars.displayWidth;
+        let cheight = vars.displayHeight;
+        let followPos = this._follow.rect.position;
         if (this._mapPixelWidth <= cwidth) {
             this._offset.x = (cwidth - this._mapPixelWidth)/2;
         } else {
@@ -115,14 +90,14 @@ function(Vector, goody, vars)
     MapCamera.prototype.display = function(cursor, objects) {
         // Displays the map and Entity objects on top. 
         this._calcOffset();
-        var bufferLength = this._buffer.length;
+        let bufferLength = this._buffer.length;
         this._ctx.fillStyle = "black";
         this._ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        for (var i = 0; i < bufferLength; i++) {
+        for (let i = 0; i < bufferLength; i++) {
             this._ctx.drawImage(this._buffer[i], this._offset.x, this._offset.y);
         }
-        for (var i = 0; i < objects.length; i++) {
+        for (let i = 0; i < objects.length; i++) {
             objects[i].drawImage(this._ctx, this._offset);
         }
     }
@@ -158,8 +133,8 @@ function(Vector, goody, vars)
 
 //        xpos = Math.floor((tile-1) % (tileset.width / dim)) * dim;
 //        ypos = Math.floor((tile-1) / (tileset.width / dim)) * dim;
-//        var xpos = ((tile+1) % (image.width / dim)) * dim;    
-  //      var ypos = Math.floor((tile-1) / (image.width / dim)) * dim; 
+//        let xpos = ((tile+1) % (image.width / dim)) * dim;    
+  //      let ypos = Math.floor((tile-1) / (image.width / dim)) * dim; 
         ctx.drawImage(
             images[tileset.image.replace(".png", "")],                                              //image
             xpos,                                                       //x position on image

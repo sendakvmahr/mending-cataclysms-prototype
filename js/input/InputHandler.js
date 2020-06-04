@@ -8,6 +8,9 @@ function(Vector)
         this.down = false;
         this.right = false;
         this.left = false;
+        this.space = false;
+        this.change = false;
+        this.changePressed = false;
         this.mousePosition = new Vector.Vector();
     }
 
@@ -36,6 +39,12 @@ function(Vector)
                         break;
                     case 68: // d right
                         this.right = event.type === "keydown";
+                        break;
+                    case 32: // space
+                        this.space = (event.type === "keydown") && (!event.repeat);
+                        break;
+                    case 81: // q
+                        this.change = (event.type === "keydown") && (!event.repeat);
                         break;
                 }
         }

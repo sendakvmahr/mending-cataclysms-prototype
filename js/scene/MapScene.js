@@ -12,31 +12,49 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         this.collisionHandler = new CollisionHandler.CollisionHandler();
         this.camera = new MapCamera.MapCamera(ctx);
         this.camera.loadMap(this.map);
+        this.party = [];
         this.loadEntities();
-        this.camera.assignEnity(this._entities[this.cameraFollow]);
+        this.camera.assignEnity(this.party[this.cameraFollow]);
+        this._changing = false;
     }
 
     MapScene.prototype.loadEntities = function() {
         // takes the entity spawn info from from the map object and makes the objects
         this._entities = [];
-        for (var i=0; i< this.map.objects.length; i++) {
-            var entity = this.map.objects[i];
-            var position = this.map.tileToPixel(entity.spawntile);
-
-            this._entities.push(EntityMaker(entity.spawn, position));
-            if ("camera" in entity) {
-                this.cameraFollo = this._entities.length-1;
+        for (let i=0; i< this.map.objects.length; i++) {
+            let entity = this.map.objects[i];
+            let position = this.map.tileToPixel(entity.spawntile);
+            this._entities.push(EntityMaker(entity, position));
+            if (entity.spawn === "PlayableEntity") {
+                this.party.push(this._entities[this._entities.length-1])
+                if (entity["camera"] === 'true') {
+                    this.cameraFollow = this.party.length-1;
+                }
+                if (entity["inputAffected"] === 'true') { 
+                    this.inputAffected = this.party.length-1;
+                } 
             }
-            if ("inputAffected" in entity) {
-                this.inputAffected = this._entities.length-1;
-            } 
         }
         this._events = this.map.eventMap;
     }
 
     MapScene.prototype.update = function(input, delta) {
         // Updates input affected entity with a set of inputs
-        this._entities[this.inputAffected].update(input, this.map, this.collisionHandler, delta)
+        if (input.change) {
+            if (!this._changing) {
+                this._changing = true;
+                this.cameraFollow += 1;
+                this.inputAffected += 1;
+                if (this.cameraFollow == this.party.length){
+                    this.cameraFollow = 0;
+                    this.inputAffected = 0;
+                }
+                this.camera.assignEnity(this.party[this.cameraFollow]);
+            }
+        } else {
+            this._changing = false;
+        }
+        this.party[this.inputAffected].update(input, this.map, this.collisionHandler, delta)
     }
 
     MapScene.prototype.click = function(mousePosition) {
