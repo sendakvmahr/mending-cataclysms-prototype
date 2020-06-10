@@ -1,25 +1,37 @@
 define(["physics/Vector", "lib/goody", "assets/vars"],
 function(Vector, goody, vars)
 {    
-    function Animation(image, frames, width, height) {
+    function Animation(image, frames, width, height, times) {
         this.width = width;
         this.height = height;
         this._maxFrames = frames;
         this._frame = 0;
         this._image = image;
+        if (Array.isArray(times)) {
+            this.times = times;
+        } else {
+            this.times = [];
+            for (let i=0; i<this._maxFrames; i++) {
+                this.times.push(times);
+            }
+        }
         //imageOffset is the current top left corner of a frame on an animation's spritesheet
         this._imageOffset = new Vector.Vector(0, 0);
+        this._lastOffset = new Date;
     }
 
     Animation.prototype.orient = function(direction) {
         // Mainly used for rotating sprites at the moment
-        this._imageOffset.y = this.height * vars.directions[direction];
+        this._imageOffset.x = this.width * vars.directions[direction];
     }
     
     Animation.prototype.update = function() {
         // Changes to the next frame and loops if needed
-        this._frame = goody.incrementLoop(this._frame, this._maxFrames);
-        this._imageOffset.x = this._frame * this.width;
+        if (Date.now() - this._lastOffset > this.times[this._frame]) {
+            this._frame = goody.incrementLoop(this._frame, this._maxFrames);
+            this._imageOffset.y = this._frame * this.height;
+            this._lastOffset = Date.now()
+        }
     }
     
     Animation.prototype.display = function(ctx, offset){

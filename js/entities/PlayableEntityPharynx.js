@@ -1,20 +1,20 @@
 define(["display/Animation", "entities/PlayableEntity", "physics/Vector", "lib/goody", "assets/vars"],
 function(Animation, PlayableEntity, Vector, goody, vars)
 {    
-    PlayableEntitySonna.prototype = new PlayableEntity.PlayableEntity();
-    PlayableEntitySonna.prototype.constructor = PlayableEntitySonna;
+    PlayableEntityPharynx.prototype = new PlayableEntity.PlayableEntity();
+    PlayableEntityPharynx.prototype.constructor = PlayableEntityPharynx;
 
-    function PlayableEntitySonna(x, y) {
+    function PlayableEntityPharynx(x, y) {
         PlayableEntity.PlayableEntity.apply(this, arguments, "Sonna");
         this._accel = 1.5;
-        this._velCap = 3;
-        this._friction = .5;
+        this._velCap = 2;
+        this._friction = .1;
         this._orientation = "D";
         this._status = "idle";
         // HERE FOR REFERENCE FOR LATER
         this._sprites = {
-            "walking" : new Animation.Animation(images["sonna_walk"], 4, 36, 96, 150),
-            "idle" : new Animation.Animation(images["sonna_idle"], 2, 36, 96, 300)
+            "walking" : new Animation.Animation(images["pharynx_walk"], 4, 36, 96, 150),
+            "idle" : new Animation.Animation(images["pharynx_idle"], 2, 36, 96, 300)
         }
         this._sprite = this._sprites["idle"];
         this._spriteOffset = new Vector.Vector(-8, -80);
@@ -24,7 +24,7 @@ function(Animation, PlayableEntity, Vector, goody, vars)
         this.rect.height = 27;
     }
 
-    PlayableEntitySonna.prototype.update = function(input, map, collisionHandler, timeDelta) {
+    PlayableEntityPharynx.prototype.update = function(input, map, collisionHandler, timeDelta) {
         // this is entirely variable by game but this is not a bad defualt
         // if moving 
         if (input !== 0) {
@@ -75,6 +75,6 @@ function(Animation, PlayableEntity, Vector, goody, vars)
     }
 
     return {
-        PlayableEntitySonna: PlayableEntitySonna
+        PlayableEntityPharynx: PlayableEntityPharynx
     };
 });

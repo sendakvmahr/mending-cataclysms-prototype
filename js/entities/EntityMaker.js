@@ -4,6 +4,8 @@ define([
 	"entities/Cursor",
 	"entities/PlayableEntity",
 	"entities/PlayableEntitySonna",
+	"entities/PlayableEntityPharynx",
+	"entities/PlayableEntityFlorence",
 	"entities/ProjectileEnemy",
 	"entities/Projectile",
 	],
@@ -13,6 +15,8 @@ function(
 	Cursor,
 	PlayableEntity,
 	PlayableEntitySonna,
+	PlayableEntityPharynx,
+	PlayableEntityFlorence,
 	ProjectileEnemy,
 	Projectile)
 {    
@@ -28,6 +32,10 @@ function(
 		case "PlayableEntity":
 			if (entity.name === "Sonna") {
 				return new PlayableEntitySonna.PlayableEntitySonna(entityLocation.x, entityLocation.y)
+			} else if (entity.name === "Florence") {
+				return new PlayableEntityFlorence.PlayableEntityFlorence(entityLocation.x, entityLocation.y)
+			} else if (entity.name === "Pharynx") {
+				return new PlayableEntityPharynx.PlayableEntityPharynx(entityLocation.x, entityLocation.y)
 			}
 			return new PlayableEntity.PlayableEntity(entityLocation.x, entityLocation.y, entity.name)
 		case "ProjectileEnemy":

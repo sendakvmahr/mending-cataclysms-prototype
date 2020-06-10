@@ -4,9 +4,9 @@ function()
 {
     // For the direction the object is facing, done on the Y-axis of the image
     let directions = {
-        "U" : 0,
-        "R" : 1,
-        "D" : 2,
+        "U" : 1,
+        "R" : 2,
+        "D" : 0,
         "L" : 3,
     }
 
@@ -14,6 +14,7 @@ function()
     let fps = 30;
 
     return {
+        updateInterval: 100, //ms
         displayHeight: 528,
         displayWidth: 748,
         tileDimension: 24,
