@@ -19,6 +19,8 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         this.map = new Map.Map(json, tileset);
         this.collisionHandler = new CollisionHandler.CollisionHandler();
         this.camera = new MapCamera.MapCamera(ctx);
+        this.projectiles = [];
+        this.enemies = [];
         this.camera.loadMap(this.map);
         this.loadEntities();
         this.camera.assignEnity(this.party[this.cameraFollow]);
@@ -31,7 +33,11 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         for (let i=0; i< this.map.objects.length; i++) {
             let entity = this.map.objects[i];
             let position = this.map.tileToPixel(entity.spawntile);
-            this._entities.push(EntityMaker(entity.spawn, position));
+            entity = EntityMaker(entity.spawn, position);
+            this._entities.push(entity);
+            if (entity.isEnemy) {
+                this.enemies.push(entity);
+            }
         }
         if (this.spawnTile === undefined) { // use the default spawnpoint if it's not from a previous room
             let position = new Vector.Vector(parseInt(this.map.events.defaultSpawn.x), parseInt(this.map.events.defaultSpawn.y))
@@ -65,6 +71,39 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
             this._changing = false;
         }
         this.party[this.inputAffected].update(input, this.map, this.collisionHandler, delta)
+
+        //this.collisionHandler.collidingObjects();
+        for (let i=0; i<this.projectiles.length; i++) {
+            if (projectile[i].living) {
+                if (projectile[i].isParty) {
+                    for (let n=0; n<this.enemies.length; n++) {
+                        if (this.collisionHandler.collidingObjects(projectiles[i], enemies[n])) {
+                            projectile[i].living = false;
+                            enemies[n].collide(projectile[i]);
+                        }
+                    }
+                }
+                else {
+                    // check against enemies and players
+                    for (let n=0; n<this.party.length; n++) {
+                        if (this.collisionHandler.collidingObjects(projectiles[i], party[n])) {
+                            projectile[i].living = false; /// if and whne this changes to attacks, some attacks may pierece/AOE
+                            party[n].collide(projectile[i]);
+                        }
+                    }
+                }
+            }
+        }
+        for (let i=0; i<this.party.length; i++) {
+            // check against enemies? and events
+            for (let n=0; n<this.party.length; n++) {
+                if (this.collisionHandler.collidingObjects(projectiles[i], party[n])) {
+                    projectile[i].living = false;
+                    party[n].collide(projectile[i]);
+                }
+            }
+
+        }
     }
 
     MapScene.prototype.click = function(mousePosition) {

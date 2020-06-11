@@ -17,6 +17,10 @@ function(goody)
         }
         return result;
     }
+
+    CollisionHandler.prototype.collidingObjects = function(entity1, entity2) {
+        return entity1.rect.collideRect(entity2.rect)
+    }
     
     return {
         CollisionHandler: CollisionHandler

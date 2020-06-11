@@ -22,7 +22,6 @@ function(Vector, Button, MenuScene, MapScene, InputHandler, goody, MapCamera, ma
         ;
         */
         this.scene = new MapScene.MapScene(this.ctx, maps.new, Tilesets);
-        // if 
         this.resizeCanvas();  
     };
     
