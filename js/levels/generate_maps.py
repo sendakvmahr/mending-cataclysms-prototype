@@ -12,12 +12,20 @@ MAP_BASE = """
             "tileheight": "{tileheight}",
             "width": "{mapwidth}",
             "height": "{mapheight}",
+            "objects" : [
+{objects}
+            ],
             "layers": {{
 {layers}
             }}
         }}"""
 MAP_LAYER = """
                     "{layername}" : [{layertiles}]"""
+MAP_OBJECT = """                {{
+{properties}
+                }}"""
+MAP_OBJECT_PROPERTY = '''
+                    "{name}" : "{value}"'''
 MAP_FILE_BASE = """define([],
 function()
 {{
@@ -87,10 +95,21 @@ def generate_single_map(filename):
         layername =  l.attrib["name"]
         layertiles = l.find("data").text.replace("\n", "")
         layers.append(MAP_LAYER.format(layername=layername, layertiles=layertiles))
+    objects = []
+    for objectgroup in root.findall("objectgroup"):
+        for ob in objectgroup.findall("object"):
+            properties = ob.attrib
+            if ob.find("properties") != None:
+                for p in ob.find("properties"):
+                    properties[p.attrib["name"]] = p.attrib["value"]
+            properties = ",".join([MAP_OBJECT_PROPERTY.format(name=key, value=obj) for key, obj in properties.items()])
+            properties = MAP_OBJECT.format(properties=properties)
+            objects.append(properties)
+    objects = ",".join(objects)
     layers = ",".join(layers)
     result = MAP_BASE.format(name=name, tileset=tileset, tilewidth=tilewidth, \
                 tileheight=tileheight, mapwidth=mapwidth, \
-                mapheight=mapheight, layers=layers)
+                mapheight=mapheight, layers=layers, objects=objects)
     return(result)
 
 def generate_map_files(levels):
