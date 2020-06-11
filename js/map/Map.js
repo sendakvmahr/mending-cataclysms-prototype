@@ -28,9 +28,12 @@ function(goody, Vector, vars)
         this.imageMap = [];
 
         this.objects = [];
-        this.events = {};
+        this.events = {
+            'sceneTransition' :[],
+            'defaultSpawn' :[]
+        };
         for (let i=0; i < json.events.length; i++) {
-            this.events[json.events[i].name] = json.events[i];
+            this.events[json.events[i].name].push(json.events[i]);
         }
         this.collisionMap = [];
 
@@ -54,6 +57,12 @@ function(goody, Vector, vars)
             // Entities
             else if (goody.stringContains(name, "Entity")) {
                 this.spawnEntities(layers[name], tilesets);
+            }
+        }
+        if (this.collisionMap.length === 0) {
+            let size = this.height * this.width;
+            for (let i=0; i<size; i++) {
+                this.collisionMap.push(0);
             }
         }
     }

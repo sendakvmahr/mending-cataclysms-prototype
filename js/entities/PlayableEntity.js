@@ -117,7 +117,6 @@ function(Animation, Entity, Vector, goody, vars)
         // mainly for scene transitions
         this.rect.setLeft(position.x);
         this.rect.setTop(position.y);
-        this.velocity.setLength(0);
     }
 
     PlayableEntity.prototype.moveBack = function(isXaxis, distance, newTile, map){

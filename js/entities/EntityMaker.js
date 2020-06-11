@@ -6,7 +6,7 @@ define([
 	"entities/PlayableEntitySonna",
 	"entities/PlayableEntityPharynx",
 	"entities/PlayableEntityFlorence",
-	"entities/ProjectileEnemy",
+	"entities/Enemy",
 	"entities/Projectile",
 	"entities/SceneTransitionEntity"
 	],
@@ -18,7 +18,7 @@ function(
 	PlayableEntitySonna,
 	PlayableEntityPharynx,
 	PlayableEntityFlorence,
-	ProjectileEnemy,
+	Enemy,
 	Projectile,
 	SceneTransitionEntity
 	)
@@ -38,10 +38,10 @@ function(
 			return new PlayableEntityFlorence.PlayableEntityFlorence(entityLocation.x, entityLocation.y)
 		case "PlayableEntityPharynx":
 			return new PlayableEntityPharynx.PlayableEntityPharynx(entityLocation.x, entityLocation.y)
-		case "ProjectileEnemy":
-			return new ProjectileEnemy.ProjectileEnemy(entityLocation.x, entityLocation.y)
-		case "sceneTransition":
-			return new SceneTransitionEntity.SceneTransitionEntity(entityLocation.x, entityLocation.y) 
+		case "Enemy":
+			return new Enemy.Enemy(entityLocation.x, entityLocation.y)
+		case "SceneTransitionEntity":
+			return new SceneTransitionEntity.SceneTransitionEntity(entityLocation.x, entityLocation.y, info);
 		default:
 			console.log("Unknown entity: " + entityName)
 			return new Entity.Entity(entityLocation.x, entityLocation.y)

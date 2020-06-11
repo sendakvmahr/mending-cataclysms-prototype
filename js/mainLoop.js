@@ -40,7 +40,10 @@ function(Vector, Button, MenuScene, MapScene, InputHandler, goody, MapCamera, ma
     
     mainLoop.prototype.update = function(delta) {
         if (this.scene.switchScenes) {
-            this.scene = new MapScene.MapScene(this.ctx, maps[this.scene.nextScene], Tilesets, this.scene.continuationInfo());
+            this.scene = new MapScene.MapScene(this.ctx, 
+                maps[this.scene.nextScene], 
+                Tilesets, 
+                this.scene.continuationInfo());
         }
         this.scene.update(this.input, delta);
     };

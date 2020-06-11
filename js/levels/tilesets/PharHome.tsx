@@ -27,7 +27,7 @@
  </tile>
  <tile id="104">
   <properties>
-   <property name="spawn" value="ProjectileEnemy"/>
+   <property name="spawn" value="Enemy"/>
   </properties>
  </tile>
 </tileset>

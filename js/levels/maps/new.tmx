@@ -137,8 +137,7 @@
   <object id="3" name="sceneTransition" x="432" y="912" width="144" height="48">
    <properties>
     <property name="transition" value="new2"/>
-    <property name="transitionX" value="4"/>
-    <property name="transitionY" value="4"/>
+    <property name="transitionTile" value="124"/>
    </properties>
   </object>
   <object id="7" name="defaultSpawn" x="506" y="367">
