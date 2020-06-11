@@ -12,7 +12,7 @@ MAP_BASE = """
             "tileheight": "{tileheight}",
             "width": "{mapwidth}",
             "height": "{mapheight}",
-            "objects" : [
+            "events" : [
 {objects}
             ],
             "layers": {{

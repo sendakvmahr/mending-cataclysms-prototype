@@ -8,6 +8,7 @@ define([
 	"entities/PlayableEntityFlorence",
 	"entities/ProjectileEnemy",
 	"entities/Projectile",
+	"entities/SceneTransitionEntity"
 	],
 function(
 	Entity, 
@@ -18,10 +19,12 @@ function(
 	PlayableEntityPharynx,
 	PlayableEntityFlorence,
 	ProjectileEnemy,
-	Projectile)
+	Projectile,
+	SceneTransitionEntity
+	)
 {    
-    function EntityMaker(entity, entityLocation) {
-    let entityName = entity.spawn;
+    function EntityMaker(entity, entityLocation, info) {
+    let entityName = entity;
 	switch(entityName) {
 		case "Entity":
 			return new Entity.Entity(entityLocation.x, entityLocation.y)
@@ -29,18 +32,18 @@ function(
 			return new GreenEntity.GreenEntity(entityLocation.x, entityLocation.y)
 		case "Cursor":
 			return new Cursor.Cursor(entityLocation.x, entityLocation.y)
-		case "PlayableEntity":
-			if (entity.name === "Sonna") {
-				return new PlayableEntitySonna.PlayableEntitySonna(entityLocation.x, entityLocation.y)
-			} else if (entity.name === "Florence") {
-				return new PlayableEntityFlorence.PlayableEntityFlorence(entityLocation.x, entityLocation.y)
-			} else if (entity.name === "Pharynx") {
-				return new PlayableEntityPharynx.PlayableEntityPharynx(entityLocation.x, entityLocation.y)
-			}
-			return new PlayableEntity.PlayableEntity(entityLocation.x, entityLocation.y, entity.name)
+		case "PlayableEntitySonna":
+			return new PlayableEntitySonna.PlayableEntitySonna(entityLocation.x, entityLocation.y)
+		case "PlayableEntityFlorence":
+			return new PlayableEntityFlorence.PlayableEntityFlorence(entityLocation.x, entityLocation.y)
+		case "PlayableEntityPharynx":
+			return new PlayableEntityPharynx.PlayableEntityPharynx(entityLocation.x, entityLocation.y)
 		case "ProjectileEnemy":
 			return new ProjectileEnemy.ProjectileEnemy(entityLocation.x, entityLocation.y)
+		case "sceneTransition":
+			return new SceneTransitionEntity.SceneTransitionEntity(entityLocation.x, entityLocation.y) 
 		default:
+			console.log("Unknown entity: " + entityName)
 			return new Entity.Entity(entityLocation.x, entityLocation.y)
 		} 
     }

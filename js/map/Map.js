@@ -28,7 +28,10 @@ function(goody, Vector, vars)
         this.imageMap = [];
 
         this.objects = [];
-        this.eventMap = [];
+        this.events = {};
+        for (let i=0; i < json.events.length; i++) {
+            this.events[json.events[i].name] = json.events[i];
+        }
         this.collisionMap = [];
 
         let layers = json.layers;
@@ -51,11 +54,6 @@ function(goody, Vector, vars)
             // Entities
             else if (goody.stringContains(name, "Entity")) {
                 this.spawnEntities(layers[name], tilesets);
-            }
-            
-            // Events for things like room trnasitions, Unused atm
-            else if (name === "Events") {
-                this.eventMap = layers[name];
             }
         }
     }

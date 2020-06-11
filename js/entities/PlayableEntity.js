@@ -113,6 +113,13 @@ function(Animation, Entity, Vector, goody, vars)
         }
     }
 
+    PlayableEntity.prototype.setPosition = function(position) {
+        // mainly for scene transitions
+        this.rect.setLeft(position.x);
+        this.rect.setTop(position.y);
+        this.velocity.setLength(0);
+    }
+
     PlayableEntity.prototype.moveBack = function(isXaxis, distance, newTile, map){
         // moves the entity out of walls it has collided with
 

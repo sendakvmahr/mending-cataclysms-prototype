@@ -22,8 +22,7 @@ function(Vector, Button, MenuScene, MapScene, InputHandler, goody, MapCamera, ma
         ;
         */
         this.scene = new MapScene.MapScene(this.ctx, maps.new, Tilesets);
-        // this.scene = new MapScene.MapScene(this.ctx, maps.intro_0, 3, 50, 80, 7, true);
-        //this.scene = new CutScene.CutScene(this.ctx, maps.new);
+        // if 
         this.resizeCanvas();  
     };
     
@@ -42,7 +41,7 @@ function(Vector, Button, MenuScene, MapScene, InputHandler, goody, MapCamera, ma
     
     mainLoop.prototype.update = function(delta) {
         if (this.scene.switchScenes) {
-            this.scene = this.scene.nextScene();
+            this.scene = new MapScene.MapScene(this.ctx, maps[this.scene.nextScene], Tilesets, this.scene.continuationInfo());
         }
         this.scene.update(this.input, delta);
     };
