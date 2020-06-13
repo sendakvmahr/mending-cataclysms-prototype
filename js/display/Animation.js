@@ -1,9 +1,10 @@
 define(["physics/Vector", "lib/goody", "assets/vars"],
 function(Vector, goody, vars)
 {    
-    function Animation(image, frames, width, height, times) {
+    function Animation(image, frames, width, height, times, offsetx, offsety) {
         this.width = width;
         this.height = height;
+        this.offset = new Vector.Vector(offsetx, offsety);
         this._maxFrames = frames;
         this._frame = 0;
         this._image = image;
@@ -35,6 +36,7 @@ function(Vector, goody, vars)
     }
     
     Animation.prototype.display = function(ctx, offset){
+        offset = this.offset.add(offset);
         // Draws the current sprite
         ctx.drawImage(   
             this._image,                                                      //image

@@ -14,7 +14,7 @@ function()
     let fps = 30;
 
     return {
-        partyList : ["PlayableEntityFlorence", "PlayableEntityPharynx", "PlayableEntitySonna"],
+        partyList : ["PlayableEntitySonna", "PlayableEntityFlorence", "PlayableEntityPharynx"],
         updateInterval: 100, //ms
         displayHeight: 528,
         displayWidth: 748,

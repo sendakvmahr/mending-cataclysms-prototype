@@ -7,8 +7,9 @@ define([
 	"entities/PlayableEntityPharynx",
 	"entities/PlayableEntityFlorence",
 	"entities/Enemy",
-	"entities/Projectile",
-	"entities/SceneTransitionEntity"
+	"entities/Attack",
+	"entities/SceneTransitionEntity",
+	"entities/FollowAttack"
 	],
 function(
 	Entity, 
@@ -19,8 +20,9 @@ function(
 	PlayableEntityPharynx,
 	PlayableEntityFlorence,
 	Enemy,
-	Projectile,
-	SceneTransitionEntity
+	Attack,
+	SceneTransitionEntity,
+	FollowAttack
 	)
 {    
     function EntityMaker(entity, entityLocation, info) {
@@ -42,6 +44,8 @@ function(
 			return new Enemy.Enemy(entityLocation.x, entityLocation.y)
 		case "SceneTransitionEntity":
 			return new SceneTransitionEntity.SceneTransitionEntity(entityLocation.x, entityLocation.y, info);
+		case "FollowAttack":
+			return new FollowAttack.FollowAttack(entityLocation.x, entityLocation.y, info["direction"], info["owner"]);
 		default:
 			console.log("Unknown entity: " + entityName)
 			return new Entity.Entity(entityLocation.x, entityLocation.y)

@@ -12,6 +12,7 @@ let imageNames = [
     "pharynx_walk",
     "pharynx_idle",
     "florence_idle",
+    "florence_run",
     "Florence",
     "tileset_Phar_Room_test",
     "projectile",

@@ -16,7 +16,6 @@ function(Animation, Entity, Vector, goody, vars)
             "idle" : new Animation.Animation(images["sonna_idle"], 2, 36, 96, 300)
         }
         this._sprite = this._sprites["idle"];
-        this._spriteOffset = new Vector.Vector(-8, -80);
         //this._shadowSprite = new Animation.Animation(images.MCshadow, 1, 20, 8);
 
         this.rect.width = 21;
@@ -31,9 +30,7 @@ function(Animation, Entity, Vector, goody, vars)
         }
     }
 
-    PlayableEntity.prototype.update = function(input, map, collisionHandler, timeDelta) {
-        // this is entirely variable by game but this is not a bad defualt
-        // if moving 
+    PlayableEntity.prototype._orient = function(input) {
         if (input !== 0) {
             if (input.up||input.down||input.right||input.left) {
                 // TODO = Better orientation based on dx and dy
@@ -72,6 +69,12 @@ function(Animation, Entity, Vector, goody, vars)
             }
             this._sprite.orient(this._orientation);
         }
+    };
+
+    PlayableEntity.prototype.update = function(input, map, collisionHandler, timeDelta) {
+        // this is entirely variable by game but this is not a bad defualt
+        // if moving 
+        this._orient(input);
         if (this.velocity.length() > .1) {
             this.setSpriteStatus("walking");
         } else {
@@ -81,9 +84,9 @@ function(Animation, Entity, Vector, goody, vars)
         this._sprite.update(timeDelta);
     }
     PlayableEntity.prototype.drawImage = function(ctx, offset) {
-        var displayOffset = this.rect.position.add(offset);
-        this._sprite.display(ctx, displayOffset.add(this._spriteOffset));
-        //this.rect.draw(ctx, offset, "#00FF00");
+        let displayOffset = this.rect.position.add(offset);
+        this._sprite.display(ctx, displayOffset);
+        this.rect.draw(ctx, offset, "#00FF00");
     }
     
     PlayableEntity.prototype._move = function(map, collisionHandler, timeDelta) {

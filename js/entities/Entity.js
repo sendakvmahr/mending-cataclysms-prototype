@@ -8,6 +8,8 @@ function(goody, Vector, Rect, vars)
         this.velocity = new Vector.Vector(0, 0); 
         this.rect = new Rect.Rect(x, y, vars.tileDimension, vars.tileDimension);
         this.isEnemy = false;
+        this.spawn = [];
+        this.spawning = false;
     }
 
     Entity.prototype.setPosition = function(x, y) {

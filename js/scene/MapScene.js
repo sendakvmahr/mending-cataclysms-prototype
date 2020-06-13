@@ -1,5 +1,5 @@
-define(["entities/EntityMaker", "scene/Script", "physics/Vector", "lib/goody", "scene/Scene", "map/Map" , "physics/CollisionHandler", "display/MapCamera", "assets/vars"],
-function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCamera, vars) 
+define(["entities/EntityMaker", "scene/Script", "physics/Vector", "lib/goody", "scene/Scene", "map/Map" , "physics/CollisionHandler", "display/MapCamera", "assets/vars", "entities/Attack"],
+function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCamera, vars, Attack) 
 {    
     MapScene.prototype = new Scene.Scene();
     MapScene.prototype.constructor = MapScene;
@@ -24,7 +24,7 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         this.map = new Map.Map(json, tileset);
         this.collisionHandler = new CollisionHandler.CollisionHandler();
         this.camera = new MapCamera.MapCamera(ctx);
-        this.projectiles = [];
+        this.attacks = [];
         this.enemies = [];
         this.sceneTransitions = [];
         this.camera.loadMap(this.map);
@@ -63,7 +63,6 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
             for (let i=0; i<this.party.length; i++) {
                 this.party[i].setPosition(position);
             } 
-            console.log(this.party);
         }
     }
 
@@ -78,32 +77,45 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
                     this.cameraFollow = 0;
                     this.inputAffected = 0;
                 }
-                console.log(this.party[this.cameraFollow]);
                 this.camera.assignEnity(this.party[this.cameraFollow]);
             }
         } else {
             this._changing = false;
         }
         this.party[this.inputAffected].update(input, this.map, this.collisionHandler, delta)
+        if (this.party[this.inputAffected].spawn.length !== 0) {
+            for (let i=0; i < this.party[this.inputAffected].spawn.length ; i++ ) {
+                let spawnInfo = this.party[this.inputAffected].spawn[i];
+                let spawn = EntityMaker(spawnInfo[0], spawnInfo[1], spawnInfo[2]);
+                if (spawn instanceof Attack.Attack) {
+                    this._entities.push(spawn);
+                    this.attacks.push(spawn);
+                }
+            }
+            this.party[this.inputAffected].spawn = [];
+        }
+
+
 
         //this.collisionHandler.collidingObjects();
         // ;-;
-        for (let i=0; i<this.projectiles.length; i++) {
-            if (this.projectile[i].living) {
-                if (this.projectile[i].isParty) {
+        for (let i=0; i<this.attacks.length; i++) {
+            if (this.attacks[i].active) {
+                this.attacks[i].update();
+                if (!this.attacks[i].isEnemyOwned()) {
                     for (let n=0; n<this.enemies.length; n++) {
-                        if (this.collisionHandler.collidingObjects(projectiles[i], enemies[n])) {
-                            this.projectile[i].living = false;
-                            enemies[n].collide(projectile[i]);
+                        if (this.collisionHandler.collidingObjects(this.attacks[i], this.enemies[n])) {
+                            //this.projectile[i].active = false;
+                            //enemies[n].collide(projectile[i]);
                         }
                     }
                 }
                 else {
                     // check against enemies and players
                     for (let n=0; n<this.party.length; n++) {
-                        if (this.collisionHandler.collidingObjects(projectiles[i], party[n])) {
-                            this.projectile[i].living = false; /// if and whne this changes to attacks, some attacks may pierece/AOE
-                            party[n].collide(this.projectile[i]);
+                        if (this.collisionHandler.collidingObjects(this.attacks[i], this.party[n])) {
+                            //this.attacks[i].living = false; /// if and whne this changes to attacks, some attacks may pierece/AOE
+                            //this.party[n].collide(this.attacks[i]);
                         }
                     }
                 }

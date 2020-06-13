@@ -19,7 +19,7 @@ function(goody, Vector)
     Rect.prototype.setTop = function(y) { this.position.y = y; };
     Rect.prototype.setBottom = function(y) { this.position.y = y - this.height; };
     
-    Rect.prototype.center = function() { return Vector.Vector(this.position.x + Math.floor(this.width/2), this.position.y + Math.floor(this.height/2)); }; 
+    Rect.prototype.center = function() { return new Vector.Vector(this.position.x + Math.floor(this.width/2), this.position.y + Math.floor(this.height/2)); }; 
     Rect.prototype.collideRect = function(r2) { return !(this.getLeft() > r2.getRight() || this.getRight() < r2.getLeft() || this.getTop() > r2.getBottom() || this.getBottom() < r2.getTop()); };
     Rect.prototype.collideVector = function(p) { return (p.x > this.getLeft() && p.x < this.getRight() && p.y < this.getBottom() && p.y > this.getTop()); };
     

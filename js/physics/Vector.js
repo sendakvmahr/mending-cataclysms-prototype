@@ -13,6 +13,11 @@ function(goody)
         return new Vector(this.x + Vector2.x, this.y + Vector2.y, this.z + Vector2.z);
     };
 
+    Vector.prototype.subtract = function(Vector2){
+        // Adds two Vectors together, returns a new Vector
+        return new Vector(this.x - Vector2.x, this.y - Vector2.y, this.z - Vector2.z);
+    };
+
     Vector.prototype.mult = function(i) {
         // Multiplies the entire vector by i. 
         // Useful for friction

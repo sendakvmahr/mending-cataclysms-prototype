@@ -5,7 +5,7 @@ function(Animation, PlayableEntity, Vector, goody, vars)
     PlayableEntityFlorence.prototype.constructor = PlayableEntityFlorence;
 
     function PlayableEntityFlorence(x, y) {
-        PlayableEntity.PlayableEntity.apply(this, arguments, "Sonna");
+        PlayableEntity.PlayableEntity.apply(this, arguments, "Florence");
         this._accel = 1.8;
         this._velCap = 4;
         this._friction = .8;
@@ -13,11 +13,11 @@ function(Animation, PlayableEntity, Vector, goody, vars)
         this._status = "idle";
         // HERE FOR REFERENCE FOR LATER
         this._sprites = {
-            "walking" : new Animation.Animation(images["sonna_walk"], 4, 36, 96, 150),
-            "idle" : new Animation.Animation(images["florence_idle"], 1, 36, 96, 300)
+            "run" : new Animation.Animation(images["florence_run"], 4, 72, 96, 150, -30, -60),
+            "idle" : new Animation.Animation(images["florence_idle"], 2, 36, 96, 300, -8, -60)
         }
+        this._sprites["walking"] = this._sprites["run"];
         this._sprite = this._sprites["idle"];
-        this._spriteOffset = new Vector.Vector(-8, -80);
         //this._shadowSprite = new Animation.Animation(images.MCshadow, 1, 20, 8);
 
         this.rect.width = 21;
@@ -27,44 +27,7 @@ function(Animation, PlayableEntity, Vector, goody, vars)
     PlayableEntityFlorence.prototype.update = function(input, map, collisionHandler, timeDelta) {
         // this is entirely variable by game but this is not a bad defualt
         // if moving 
-        if (input !== 0) {
-            if (input.up||input.down||input.right||input.left) {
-                // TODO = Better orientation based on dx and dy
-                if (input.up) {   
-                    this.velocity.y -= this._accel;
-                }
-                if (input.right) {
-                    this.velocity.x += this._accel;
-                }
-                if (input.down) {
-                    this.velocity.y += this._accel;
-                }
-                if (input.left) {
-                    this.velocity.x -= this._accel;
-                }        
-                if (this.velocity.length() > this._velCap) {
-                    this.velocity.setLength(this._velCap);
-                }; 
-            }
-            else {
-                this.velocity.mult(this._friction);
-            }
-            var angle = 180 * this.velocity.getDirection() / Math.PI;
-            if (angle < 0) {angle += 360;}
-            if (angle > 22.5 && angle < 122.5) {
-                this._orientation = "D";
-            }
-            else if (angle > 202.5 && angle < 292.5) {
-                this._orientation = "U";
-            }
-            else if (angle > 122.5 && angle < 202.5) {
-                this._orientation = "L";
-            }
-            else {
-                this._orientation = "R";
-            }
-            this._sprite.orient(this._orientation);
-        }
+        this._orient(input);
         if (this.velocity.length() > .1) {
             this.setSpriteStatus("walking");
         } else {

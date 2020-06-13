@@ -1,14 +1,19 @@
-define(["display/Animation", "entities/Entity", "physics/Vector", "lib/goody", "assets/vars"],
-function(Animation, Entity, Vector, goody, vars)
+define(["display/Animation", "entities/Entity", "physics/Vector", "lib/goody", "assets/vars", "entities/PlayableEntity"],
+function(Animation, Entity, Vector, goody, vars, PlayableEntity)
 {    
-    Projectile.prototype = new Entity.Entity();
-    Projectile.prototype.constructor = Projectile;
+    Attack.prototype = new Entity.Entity();
+    Attack.prototype.constructor = Attack;
 
-    function Projectile(x, y, z) {
+    function Attack(x, y, direction, owner) {
         Entity.Entity.apply(this, arguments);
         this._accel = 1.5;
         this._velCap = 3;
         this._friction = .7;
+        this.direction = direction;
+        this.owner = owner;
+        this.pierce = false;
+        this.active = true;
+        this.duration = 500; //ms
         // HERE FOR REFERENCE FOR LATER
         //this._sprite = new Animation.Animation(images.MC, 1, 24, 48);
         //this._shadowSprite = new Animation.Animation(images.MCshadow, 1, 20, 8);
@@ -17,23 +22,23 @@ function(Animation, Entity, Vector, goody, vars)
         this.rect.height = 5;
     }
 
-    Projectile.prototype.update = function(map, collisionHandler, timeDelta) {
+    Attack.prototype.update = function(map, collisionHandler, timeDelta) {
         this._move(map, collisionHandler, timeDelta);
         //this._sprite.update();
     }
 
-    Projectile.prototype.drawImage = function(ctx, offset) {
-        this.rect.draw(ctx, offset, "#FFFF00");
+    Attack.prototype.drawImage = function(ctx, offset) {
+        this.rect.draw(ctx, offset, "#FFFFFF");
     }
     
-    Projectile.prototype._move = function(map, collisionHandler, timeDelta) {
+    Attack.prototype._move = function(map, collisionHandler, timeDelta) {
         this.moveAxis("x", this.velocity.x * timeDelta/9, collisionHandler, map);
         this.moveAxis("y", this.velocity.y * timeDelta/9, collisionHandler, map);
     }
 
-    Projectile.prototype.moveAxis = function(axis, distance, collisionHandler, map) {
-        var isXaxis = axis === "x";
-        var currentTiles = collisionHandler.collidingTiles(map, this.rect);
+    Attack.prototype.moveAxis = function(axis, distance, collisionHandler, map) {
+        let isXaxis = axis === "x";
+        let currentTiles = collisionHandler.collidingTiles(map, this.rect);
         // Move forward the right position area, then look at the tiles the rect is on
         // and see if there are any new tile effects to be applied
         if (isXaxis) { 
@@ -42,18 +47,24 @@ function(Animation, Entity, Vector, goody, vars)
         else { 
             this.rect.position.y = goody.cap(this.rect.position.y + distance, 0, map.pixelHeight - this.rect.height - 1); 
         }
-        var newTiles = collisionHandler.collidingTiles(map, this.rect);
-        // See if you're on any new tiles
-        for (var i = 0; i < newTiles.length; i++) {
-            // If the one of the new tiles was just stepped onto is in the collision map
-            if (map.collisionMap[newTiles[i]] !== 0) {
-                this.moveBack(isXaxis, distance, newTiles[i], map);
-                i = newTiles.length;
+        if (!this.pierce) {
+            let newTiles = collisionHandler.collidingTiles(map, this.rect);
+            // See if you're on any new tiles
+            for (let i = 0; i < newTiles.length; i++) {
+                // If the one of the new tiles was just stepped onto is in the collision map
+                if (map.collisionMap[newTiles[i]] !== 0) {
+                    this.moveBack(isXaxis, distance, newTiles[i], map);
+                    i = newTiles.length;
+                }
             }
         }
     }
 
-    Projectile.prototype.moveBack = function(isXaxis, distance, newTile, map){
+    Attack.prototype.isEnemyOwned = function() {
+        return this.owner instanceof PlayableEntity.PlayableEntity;
+    }
+
+    Attack.prototype.moveBack = function(isXaxis, distance, newTile, map){
         // moves the entity out of walls it has collided with
 
         // moving right, hit left side of wall
@@ -75,6 +86,6 @@ function(Animation, Entity, Vector, goody, vars)
     }
     
     return {
-        Projectile: Projectile
+        Attack: Attack
     };
 });
