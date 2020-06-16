@@ -1,7 +1,7 @@
 import os
 import xml.etree.ElementTree as ET
 
-CURRENT = os.getcwd()
+CURRENT = os.getcwd() + r"/js/levels" 
 LEVELS_DIR = CURRENT + "/maps"
 ASSETS_DIR = CURRENT + "/tilesets/"
 MAP_BASE = """
