@@ -12,6 +12,7 @@ function(Animation, Entity, Vector, goody, vars, PlayableEntity)
         this._friction = .7;
         this.direction = info.direction;
         this.owner = info.owner;
+        this.rect.position = info.position;
         this.pierce = false;
         this.active = true;
         this.duration = 500000000000; //ms
