@@ -1,10 +1,11 @@
 define(["display/Animation", "entities/Entity", "physics/Vector", "lib/goody", "assets/vars"],
 function(Animation, Entity, Vector, goody, vars)
 {    
-    PlayableEntity.prototype = new Entity.Entity();
+    PlayableEntity.prototype = new Entity.Entity({"x":0, "y": 0});
     PlayableEntity.prototype.constructor = PlayableEntity;
 
-    function PlayableEntity(x, y, name) {
+    function PlayableEntity(info) {
+        // x, y
         Entity.Entity.apply(this, arguments);
         this._accel = 1.5;
         this._velCap = 3;

@@ -1,10 +1,11 @@
 define(["display/Animation", "entities/Entity", "physics/Vector", "lib/goody", "assets/vars"],
 function(Animation, Entity, Vector, goody, vars)
 {    
-    Enemy.prototype = new Entity.Entity();
+    Enemy.prototype = new Entity.Entity({"x":0, "y": 0});
     Enemy.prototype.constructor = Enemy;
 
-    function Enemy(x, y, z) {
+    function Enemy(info) {
+        //location
         Entity.Entity.apply(this, arguments);
         this.isEnemy = true;
         // HERE FOR REFERENCE FOR LATER

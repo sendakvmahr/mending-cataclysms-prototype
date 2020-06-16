@@ -1,11 +1,12 @@
 define(["display/Animation", "entities/PlayableEntity", "physics/Vector", "lib/goody", "assets/vars"],
 function(Animation, PlayableEntity, Vector, goody, vars)
 {    
-    PlayableEntitySonna.prototype = new PlayableEntity.PlayableEntity();
+    PlayableEntitySonna.prototype = new PlayableEntity.PlayableEntity({"x":0, "y": 0});
     PlayableEntitySonna.prototype.constructor = PlayableEntitySonna;
 
-    function PlayableEntitySonna(x, y) {
-        PlayableEntity.PlayableEntity.apply(this, arguments, "Sonna");
+    function PlayableEntitySonna(info) {
+        // x, y
+        PlayableEntity.PlayableEntity.apply(this, arguments);
         this._accel = 1.5;
         this._velCap = 3;
         this._friction = .5;
@@ -27,9 +28,11 @@ function(Animation, PlayableEntity, Vector, goody, vars)
         // this is entirely variable by game but this is not a bad defualt
         // if moving 
         this._orient(input);
+        
         if (input && input.space && !this.spawning) {
             let center = this.rect.center();
-            this.spawn.push(["FollowAttack", center, {
+            this.spawn.push(["FollowAttack", {
+                "position": center,
                 "owner" : this,
                 "direction" : this._orientation
             }]);
@@ -37,6 +40,7 @@ function(Animation, PlayableEntity, Vector, goody, vars)
         } else if (input && !input.space){
             this.spawning = false;
         }
+
         if (this.velocity.length() > .1) {
             this.setSpriteStatus("walking");
         } else {

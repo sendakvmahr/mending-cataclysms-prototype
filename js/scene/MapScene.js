@@ -39,22 +39,24 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         for (let i=0; i< this.map.objects.length; i++) {
             let entity = this.map.objects[i];
             let position = this.map.tileToPixel(entity.spawntile);
-            entity = EntityMaker(entity.spawn, position);
+            entity = EntityMaker(entity.spawn, {"x": position.x, "y": position.y});
             this._entities.push(entity);
             if (entity.isEnemy) {
                 this.enemies.push(entity);
             }
         }
         for (let i=0; i< this.map.events.sceneTransition.length; i++) { 
-            let sceneTransition = this.map.events.sceneTransition[i];
-            let entity = EntityMaker('SceneTransitionEntity', {"x": sceneTransition.x, "y": sceneTransition.y}, sceneTransition);
+            let entityInfo = this.map.events.sceneTransition[i];
+            entityInfo["x"] = this.map.events.sceneTransition.x;
+            entityInfo["y"] = this.map.events.sceneTransition.y;
+            let entity = EntityMaker('SceneTransitionEntity', entityInfo);
             this._entities.push(entity);
             this.sceneTransitions.push(entity);
         }
         if (this.spawnTile === undefined) { // use the default spawnpoint if it's not from a previous room
             let position = new Vector.Vector(parseInt(this.map.events.defaultSpawn[0].x), parseInt(this.map.events.defaultSpawn[0].y))
             for (let i=0; i<vars.partyList.length; i++) {
-                let entity = EntityMaker(vars.partyList[i], position);
+                let entity = EntityMaker(vars.partyList[i], {"x": position.x, "y": position.y});
                 this.party.push(entity);
                 this._entities.push(entity);
             } 
@@ -86,7 +88,7 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         if (this.party[this.inputAffected].spawn.length !== 0) {
             for (let i=0; i < this.party[this.inputAffected].spawn.length ; i++ ) {
                 let spawnInfo = this.party[this.inputAffected].spawn[i];
-                let spawn = EntityMaker(spawnInfo[0], spawnInfo[1], spawnInfo[2]);
+                let spawn = EntityMaker(spawnInfo[0], spawnInfo[1]);
                 if (spawn instanceof Attack.Attack) {
                     this._entities.push(spawn);
                     this.attacks.push(spawn);
@@ -100,8 +102,9 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         //this.collisionHandler.collidingObjects();
         // ;-;
         for (let i=0; i<this.attacks.length; i++) {
+            console.log(this.attacks[i])
             if (this.attacks[i].active) {
-                this.attacks[i].update();
+                this.attacks[i].update(delta);
                 if (!this.attacks[i].isEnemyOwned()) {
                     for (let n=0; n<this.enemies.length; n++) {
                         if (this.collisionHandler.collidingObjects(this.attacks[i], this.enemies[n])) {

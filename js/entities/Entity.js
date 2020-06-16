@@ -4,9 +4,10 @@ Base class for all entities
 define(["lib/goody", "physics/Vector", "physics/Rect", "assets/vars"],
 function(goody, Vector, Rect, vars)
 {    
-    function Entity(x, y, z) {       
+    function Entity(info) {       
+
         this.velocity = new Vector.Vector(0, 0); 
-        this.rect = new Rect.Rect(x, y, vars.tileDimension, vars.tileDimension);
+        this.rect = new Rect.Rect(info.x, info.y, vars.tileDimension, vars.tileDimension);
         this.isEnemy = false;
         this.spawn = [];
         this.spawning = false;

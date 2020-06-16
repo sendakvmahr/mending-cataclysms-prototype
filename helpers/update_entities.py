@@ -12,13 +12,12 @@ function(
     {objnames}
     )
 {{    
-    function EntityMaker(entity, entityLocation, info) {{
-    let entityName = entity;
+    function EntityMaker(entityName, info) {{
     switch(entityName) {{
 {cases}
         default:
             console.log("Unknown entity: " + entityName)
-            return new Entity.Entity(entityLocation.x, entityLocation.y);
+            return new Entity.Entity(info);
         }}
     }}              
     return EntityMaker;

@@ -1,7 +1,7 @@
 define(["display/Animation", "physics/Vector", "lib/goody"],
 function(Animation, Vector, goody)
 {    
-    function Cursor(element) {
+    function Cursor() {
         this.position = new Vector.Vector(0,0); 
     };
 

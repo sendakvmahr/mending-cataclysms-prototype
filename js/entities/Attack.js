@@ -1,19 +1,20 @@
 define(["display/Animation", "entities/Entity", "physics/Vector", "lib/goody", "assets/vars", "entities/PlayableEntity"],
 function(Animation, Entity, Vector, goody, vars, PlayableEntity)
 {    
-    Attack.prototype = new Entity.Entity();
+    Attack.prototype = new Entity.Entity({"x":0, "y": 0});
     Attack.prototype.constructor = Attack;
 
-    function Attack(x, y, direction, owner) {
+    function Attack(info) {
+        // postion, direction, owner
         Entity.Entity.apply(this, arguments);
         this._accel = 1.5;
         this._velCap = 3;
         this._friction = .7;
-        this.direction = direction;
-        this.owner = owner;
+        this.direction = info.direction;
+        this.owner = info.owner;
         this.pierce = false;
         this.active = true;
-        this.duration = 500; //ms
+        this.duration = 500000000000; //ms
         // HERE FOR REFERENCE FOR LATER
         //this._sprite = new Animation.Animation(images.MC, 1, 24, 48);
         //this._shadowSprite = new Animation.Animation(images.MCshadow, 1, 20, 8);

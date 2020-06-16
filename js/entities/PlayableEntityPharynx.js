@@ -1,11 +1,12 @@
 define(["display/Animation", "entities/PlayableEntity", "physics/Vector", "lib/goody", "assets/vars"],
 function(Animation, PlayableEntity, Vector, goody, vars)
 {    
-    PlayableEntityPharynx.prototype = new PlayableEntity.PlayableEntity();
+    PlayableEntityPharynx.prototype = new PlayableEntity.PlayableEntity({"x":0, "y": 0});
     PlayableEntityPharynx.prototype.constructor = PlayableEntityPharynx;
 
-    function PlayableEntityPharynx(x, y) {
-        PlayableEntity.PlayableEntity.apply(this, arguments, "Sonna");
+    function PlayableEntityPharynx(info) {
+        // x, y
+        PlayableEntity.PlayableEntity.apply(this, arguments);
         this._accel = 1.5;
         this._velCap = 2;
         this._friction = .1;
