@@ -12,6 +12,7 @@ function(goody, Vector, Rect, vars)
         this.spawn = [];
         this.spawning = false;
         this.toDelete = false;
+        this.initiated = false;
     }
 
     Entity.prototype.setPosition = function(x, y) {

@@ -18,6 +18,7 @@ function(Animation, Attack, Vector, goody, vars)
         this.ownerPosition = this.owner.rect.center();
         this.rect.width = 20;
         this.rect.height = 20;
+        this.duration = 200;
 
         let offset = "";
         if (this.direction == "D") { 
@@ -32,12 +33,12 @@ function(Animation, Attack, Vector, goody, vars)
         this.rect.position = this.rect.position.add(offset);
     }
 
-    FollowAttack.prototype.update = function(timeDelta) {
+    FollowAttack.prototype.update = function(map, collisionHandler, timeDelta) {
         let offset = this.owner.rect.center().subtract(this.ownerPosition);
         this.rect.position = this.rect.position.add(offset);
         this.ownerPosition = this.owner.rect.center();
         this.duration -= timeDelta;
-        this.active = this.duration >= 0;
+        this.toDelete = this.duration <= 0;
     }
 
     FollowAttack.prototype.drawImage = function(ctx, offset) {

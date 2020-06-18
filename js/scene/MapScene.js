@@ -65,30 +65,49 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         }
     }
 
-    MapScene.prototype.update = function(input, delta) {
-        // Updates input affected entity with a set of inputs
-        if (input.change) {
-            if (!this._changing) {
-                this._changing = true;
-                this.inputAffected = goody.incrementLoop(this.inputAffected, this.entities["party"].length);
-                this.camera.assignEnity(this.party[this.inputAffected]);
+    MapScene.prototype.updateEntites = function(delta){
+        let toUpdate = ["enemies", "sceneTransitions", "attacks", "other"];
+        for (let i=0; i < toUpdate.length; i++) {
+            for (let n=0; n<this.entities[toUpdate[i]].length; n++) {
+                this.entities[toUpdate[i]][n].update(this.map, this.collisionHandler, delta);
             }
-        } else {
-            this._changing = false;
         }
-        console.log(this.inputAffected)
-        this.entities["party"][this.inputAffected].update(input, this.map, this.collisionHandler, delta)
-        if (this.entities["party"][this.inputAffected].spawn.length !== 0) {
-            for (let i=0; i < this.entities["party"][this.inputAffected].spawn.length ; i++ ) {
-                let spawnInfo = this.entities["party"][this.inputAffected].spawn[i];
+    }
+
+    MapScene.prototype._spawnAttacks = function(entity){
+        if (entity.spawn.length !== 0) {
+            for (let i=0; i < entity.spawn.length ; i++ ) {
+                let spawnInfo = entity.spawn[i];
                 let spawn = EntityMaker(spawnInfo[0], spawnInfo[1]);
                 if (spawn instanceof Attack.Attack) {
                     this.entities.attacks.push(spawn);
                 }
             }
-            this.entities["party"][this.inputAffected].spawn = [];
-        }
+          entity.spawn = []; 
+        } 
+    }
 
+
+    MapScene.prototype.update = function(input, delta) {
+        // Updates input affected entity with a set of inputs
+        this.updateEntites(delta);
+        if (input.change) {
+            if (!this._changing) {
+                this._changing = true;
+                this.inputAffected = goody.incrementLoop(this.inputAffected, this.entities["party"].length);
+                this.camera.assignEnity(this.entities["party"][this.inputAffected]);
+            }
+        } else {
+            this._changing = false;
+        }
+        for (let p=0; p < this.entities["party"].length; p++){
+            if (this.inputAffected == p) {
+                this.entities["party"][this.inputAffected].inputUpdate(input, this.map, this.collisionHandler, delta)
+            } else {
+                this.entities["party"][p].update(this.map, this.collisionHandler, delta);
+            }
+            this._spawnAttacks(this.entities["party"][p])
+        }
 
         for (let i=0; i<this.entities.attacks.length; i++) {
             if (this.entities.attacks[i].active) {
@@ -125,6 +144,9 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
                 }
             }
         }
+        this.entities["enemies"] = this.entities["enemies"].filter(enemy => !enemy.toDelete);
+        this.entities["attacks"] = this.entities["attacks"].filter(attack => !attack.toDelete);
+
     }
 
     MapScene.prototype.click = function(mousePosition) {
@@ -138,6 +160,10 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
     MapScene.prototype.display = function() {
         // draws the scene
         this.camera.display(this.cursor, this.entities);
+        this.camera.showString(this.entities["attacks"].length.toString(), 20);
+        if (this.entities["attacks"].length > 0) {
+            this.camera.showString(this.entities["attacks"][this.entities["attacks"].length-1].duration.toString(), 40);
+        }
     }
 
     MapScene.prototype.continuationInfo = function() {

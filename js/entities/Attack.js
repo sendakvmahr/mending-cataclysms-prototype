@@ -14,7 +14,6 @@ function(Animation, Entity, Vector, goody, vars, PlayableEntity)
         this.owner = info.owner;
         this.rect.position = info.position;
         this.pierce = false;
-        this.active = true;
         this.duration = 500000000000; //ms
         // HERE FOR REFERENCE FOR LATER
         //this._sprite = new Animation.Animation(images.MC, 1, 24, 48);

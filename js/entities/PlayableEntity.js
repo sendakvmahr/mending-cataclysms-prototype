@@ -72,7 +72,11 @@ function(Animation, Entity, Vector, goody, vars)
         }
     };
 
-    PlayableEntity.prototype.update = function(input, map, collisionHandler, timeDelta) {
+    PlayableEntity.prototype.update = function(map, collisionHandler, timeDelta) {
+        this._sprite.update(timeDelta);
+    }
+
+    PlayableEntity.prototype.inputUpdate = function(input, map, collisionHandler, timeDelta) {
         // this is entirely variable by game but this is not a bad defualt
         // if moving 
         this._orient(input);
@@ -87,7 +91,9 @@ function(Animation, Entity, Vector, goody, vars)
     PlayableEntity.prototype.drawImage = function(ctx, offset) {
         let displayOffset = this.rect.position.add(offset);
         this._sprite.display(ctx, displayOffset);
-        this.rect.draw(ctx, offset, "#00FF00");
+        if (vars.debug) {
+           this.rect.draw(ctx, offset, "#00FF00");
+        }
     }
     
     PlayableEntity.prototype._move = function(map, collisionHandler, timeDelta) {

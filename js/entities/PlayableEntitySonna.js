@@ -22,9 +22,10 @@ function(Animation, PlayableEntity, Vector, goody, vars)
 
         this.rect.width = 21;
         this.rect.height = 27;
+        this.initiated = true;
     }
-
-    PlayableEntitySonna.prototype.update = function(input, map, collisionHandler, timeDelta) {
+    
+    PlayableEntitySonna.prototype.inputUpdate = function(input, map, collisionHandler, timeDelta) {
         // this is entirely variable by game but this is not a bad defualt
         // if moving 
         this._orient(input);

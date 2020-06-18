@@ -113,9 +113,6 @@ function(Vector, goody, vars)
         let tilesetinfo = map.tilesetInfo;
         let tiles = "";
         let tileOffset = 0;
-
-//debugger;
-
         
         // for multiple tilesets, things will get trickier
         for (let n=0; n<tilesetinfo.length; n++) {
@@ -125,17 +122,8 @@ function(Vector, goody, vars)
         // tileset should be stored with each map load omfgs -_-
         let tilesPerRow = 16; // need to fetch from map dat ain the futureS
         let tileset = map.tileset[tiles];
-        // offset for the number and processing tiles
-        //tile = tile - 13; 
-        //for every tile:
-        //    find the image it corresponds to
         let xpos = ((tile - 1) % tilesPerRow) * dim; 
         let ypos = Math.floor(tile / tilesPerRow) * dim;
-
-//        xpos = Math.floor((tile-1) % (tileset.width / dim)) * dim;
-//        ypos = Math.floor((tile-1) / (tileset.width / dim)) * dim;
-//        let xpos = ((tile+1) % (image.width / dim)) * dim;    
-  //      let ypos = Math.floor((tile-1) / (image.width / dim)) * dim; 
         ctx.drawImage(
             images[tileset.image.replace(".png", "")],                                              //image
             xpos,                                                       //x position on image
