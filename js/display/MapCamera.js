@@ -17,13 +17,9 @@ function(Vector, goody, vars)
         this._mapPixelWidth = map.pixelWidth;
         this._mapPixelHeight = map.pixelHeight;
         this._mapLength = map.length;
-        // THIS WAS FFTP SPECIFIC, as each height element had both an effect layer and a base layer. 
-        //but buffer length should be set anyways
         let bufferLength = map.displayedLayers;
         for (let i = 0; i < bufferLength; i+=1) {
             this.renderLayer(map.imageMap[i], map);
-            //this.renderLayer(map.imageMap[Math.floor(i/2)], map, images.Tileset);
-            //this.renderLayer(map.effectMap[Math.floor(i/2)], map, images.Tileset);
         }
         // Set font and color for debugging information
         this._ctx.font = "20px sans-serif";
@@ -97,8 +93,13 @@ function(Vector, goody, vars)
         for (let i = 0; i < bufferLength; i++) {
             this._ctx.drawImage(this._buffer[i], this._offset.x, this._offset.y);
         }
-        for (let i = 0; i < objects.length; i++) {
-            objects[i].drawImage(this._ctx, this._offset);
+        let objectItems = Object.keys(objects);
+
+        for (let i = 0; i < objectItems.length; i++) {
+            let entities = objects[objectItems[i]];
+            for (let e = 0; e < entities.length; e++) {
+                entities[e].drawImage(this._ctx, this._offset);
+            }
         }
     }
 

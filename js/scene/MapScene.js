@@ -5,31 +5,28 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
     MapScene.prototype.constructor = MapScene;
 
     function MapScene(ctx, json, tileset, continuationInfo) {
+        this.entities = {
+            "party": [],
+            "enemies": [],
+            "sceneTransitions": [],
+            "attacks": [],
+            "other": []
+        }
         if (continuationInfo) {
+            // for mapscenes, assume camera follows inputAffected
             this.inputAffected = continuationInfo.inputAffected; // index of user input affected entity. Only one at a time.
-            this.cameraFollow = continuationInfo.cameraFollow;  // index of camera tracked entity. Only one at a time.
-            this.party = continuationInfo.party;
             this.spawnTile = continuationInfo.spawnTile;
-            this._entities = [];
-            for (let i=0; i<this.party.length; i++) {
-                this._entities.push(this.party[i]);
-            }
+            this.entities["party"] = continuationInfo.party;
         } else {
-            this.inputAffected = 0; // index of user input affected entity. Only one at a time.
-            this.cameraFollow = 0;  // index of camera tracked entity. Only one at a time.
-            this.party = [];
-            this._entities = [];
+            this.inputAffected = 0;
         }
         // Logic holder and controller of maps and cameras.
         this.map = new Map.Map(json, tileset);
         this.collisionHandler = new CollisionHandler.CollisionHandler();
         this.camera = new MapCamera.MapCamera(ctx);
-        this.attacks = [];
-        this.enemies = [];
-        this.sceneTransitions = [];
         this.camera.loadMap(this.map);
         this.loadEntities();
-        this.camera.assignEnity(this.party[this.cameraFollow]);
+        this.camera.assignEnity(this.entities["party"][this.inputAffected]);
         this._changing = false;
         this.switchScenes = false;
     }
@@ -40,9 +37,11 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
             let entity = this.map.objects[i];
             let position = this.map.tileToPixel(entity.spawntile);
             entity = EntityMaker(entity.spawn, {"x": position.x, "y": position.y});
-            this._entities.push(entity);
             if (entity.isEnemy) {
-                this.enemies.push(entity);
+                this.entities.enemies.push(entity);
+            }
+            else {
+                this.entities.other.push(entity);
             }
         }
         for (let i=0; i< this.map.events.sceneTransition.length; i++) { 
@@ -50,20 +49,18 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
             entityInfo["x"] = this.map.events.sceneTransition.x;
             entityInfo["y"] = this.map.events.sceneTransition.y;
             let entity = EntityMaker('SceneTransitionEntity', entityInfo);
-            this._entities.push(entity);
-            this.sceneTransitions.push(entity);
+            this.entities['sceneTransitions'].push(entity);
         }
         if (this.spawnTile === undefined) { // use the default spawnpoint if it's not from a previous room
             let position = new Vector.Vector(parseInt(this.map.events.defaultSpawn[0].x), parseInt(this.map.events.defaultSpawn[0].y))
             for (let i=0; i<vars.partyList.length; i++) {
                 let entity = EntityMaker(vars.partyList[i], {"x": position.x, "y": position.y});
-                this.party.push(entity);
-                this._entities.push(entity);
+                this.entities["party"].push(entity);
             } 
         } else {
             let position = this.map.tileToPixel(this.spawnTile);
-            for (let i=0; i<this.party.length; i++) {
-                this.party[i].setPosition(position);
+            for (let i=0; i<this.entities["party"].length; i++) {
+                this.entities["party"][i].setPosition(position);
             } 
         }
     }
@@ -73,41 +70,32 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         if (input.change) {
             if (!this._changing) {
                 this._changing = true;
-                this.cameraFollow += 1;
-                this.inputAffected += 1;
-                if (this.cameraFollow === this.party.length){
-                    this.cameraFollow = 0;
-                    this.inputAffected = 0;
-                }
-                this.camera.assignEnity(this.party[this.cameraFollow]);
+                this.inputAffected = goody.incrementLoop(this.inputAffected, this.entities["party"].length);
+                this.camera.assignEnity(this.party[this.inputAffected]);
             }
         } else {
             this._changing = false;
         }
-        this.party[this.inputAffected].update(input, this.map, this.collisionHandler, delta)
-        if (this.party[this.inputAffected].spawn.length !== 0) {
-            for (let i=0; i < this.party[this.inputAffected].spawn.length ; i++ ) {
-                let spawnInfo = this.party[this.inputAffected].spawn[i];
+        console.log(this.inputAffected)
+        this.entities["party"][this.inputAffected].update(input, this.map, this.collisionHandler, delta)
+        if (this.entities["party"][this.inputAffected].spawn.length !== 0) {
+            for (let i=0; i < this.entities["party"][this.inputAffected].spawn.length ; i++ ) {
+                let spawnInfo = this.entities["party"][this.inputAffected].spawn[i];
                 let spawn = EntityMaker(spawnInfo[0], spawnInfo[1]);
                 if (spawn instanceof Attack.Attack) {
-                    this._entities.push(spawn);
-                    this.attacks.push(spawn);
+                    this.entities.attacks.push(spawn);
                 }
             }
-            this.party[this.inputAffected].spawn = [];
+            this.entities["party"][this.inputAffected].spawn = [];
         }
 
 
-
-        //this.collisionHandler.collidingObjects();
-        // ;-;
-        for (let i=0; i<this.attacks.length; i++) {
-            console.log(this.attacks[i])
-            if (this.attacks[i].active) {
-                this.attacks[i].update(delta);
-                if (!this.attacks[i].isEnemyOwned()) {
-                    for (let n=0; n<this.enemies.length; n++) {
-                        if (this.collisionHandler.collidingObjects(this.attacks[i], this.enemies[n])) {
+        for (let i=0; i<this.entities.attacks.length; i++) {
+            if (this.entities.attacks[i].active) {
+                this.entities.attacks[i].update(delta);
+                if (!this.entities.attacks[i].isEnemyOwned()) {
+                    for (let n=0; n<this.entities.enemies.length; n++) {
+                        if (this.collisionHandler.collidingObjects(this.entities.attacks[i], this.entities.enemies[n])) {
                             //this.projectile[i].active = false;
                             //enemies[n].collide(projectile[i]);
                         }
@@ -115,8 +103,8 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
                 }
                 else {
                     // check against enemies and players
-                    for (let n=0; n<this.party.length; n++) {
-                        if (this.collisionHandler.collidingObjects(this.attacks[i], this.party[n])) {
+                    for (let n=0; n<this.entities["party"].length; n++) {
+                        if (this.collisionHandler.collidingObjects(this.entities.attacks[i], this.entities["party"][n])) {
                             //this.attacks[i].living = false; /// if and whne this changes to attacks, some attacks may pierece/AOE
                             //this.party[n].collide(this.attacks[i]);
                         }
@@ -124,13 +112,13 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
                 }
             }
         }
-        for (let i=0; i<this.party.length; i++) {
+        for (let i=0; i<this.entities["party"].length; i++) {
             // check against enemies? and events
             if (i === this.inputAffected) { // is the character under player control
-                for (let n=0; n<this.sceneTransitions.length; n++) {
-                    if (this.collisionHandler.collidingObjects(this.party[i], this.sceneTransitions[n])) {
-                        this.nextScene = this.sceneTransitions[n].nextScene;
-                        this.nextSceneTile = this.sceneTransitions[n].nextSceneTile;
+                for (let n=0; n<this.entities.sceneTransitions.length; n++) {
+                    if (this.collisionHandler.collidingObjects(this.entities["party"][i], this.entities.sceneTransitions[n])) {
+                        this.nextScene = this.entities.sceneTransitions[n].nextScene;
+                        this.nextSceneTile = this.entities.sceneTransitions[n].nextSceneTile;
                         this.switchScenes = true;
 
                     }
@@ -149,7 +137,7 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
 
     MapScene.prototype.display = function() {
         // draws the scene
-        this.camera.display(this.cursor, this._entities);
+        this.camera.display(this.cursor, this.entities);
     }
 
     MapScene.prototype.continuationInfo = function() {
