@@ -22,6 +22,6 @@ function()
         fps: fps,
         interval: 1000/fps,
         directions: directions,
-        debug: false,
+        debug: true,
     }
 });

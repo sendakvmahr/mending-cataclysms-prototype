@@ -62,7 +62,10 @@ function(Animation, Entity, Vector, goody, vars, PlayableEntity)
     }
 
     Attack.prototype.isEnemyOwned = function() {
-        return this.owner instanceof PlayableEntity.PlayableEntity;
+        return !this.owner instanceof PlayableEntity.PlayableEntity;
+    }
+
+    Attack.prototype.onHit = function() {
     }
 
     Attack.prototype.moveBack = function(isXaxis, distance, newTile, map){

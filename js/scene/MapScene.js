@@ -110,13 +110,12 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         }
 
         for (let i=0; i<this.entities.attacks.length; i++) {
-            if (this.entities.attacks[i].active) {
-                this.entities.attacks[i].update(delta);
+            if (!this.entities.attacks[i].toDelete) {
                 if (!this.entities.attacks[i].isEnemyOwned()) {
                     for (let n=0; n<this.entities.enemies.length; n++) {
                         if (this.collisionHandler.collidingObjects(this.entities.attacks[i], this.entities.enemies[n])) {
-                            //this.projectile[i].active = false;
-                            //enemies[n].collide(projectile[i]);
+                            this.entities.attacks[i].onHit();
+                            this.entities.enemies[n].applyAttack(this.entities.attacks[i]);
                         }
                     }
                 }
@@ -124,7 +123,7 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
                     // check against enemies and players
                     for (let n=0; n<this.entities["party"].length; n++) {
                         if (this.collisionHandler.collidingObjects(this.entities.attacks[i], this.entities["party"][n])) {
-                            //this.attacks[i].living = false; /// if and whne this changes to attacks, some attacks may pierece/AOE
+                            //this.attacks[i].toDelete = true; /// if and whne this changes to attacks, some attacks may pierece/AOE
                             //this.party[n].collide(this.attacks[i]);
                         }
                     }
@@ -139,7 +138,6 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
                         this.nextScene = this.entities.sceneTransitions[n].nextScene;
                         this.nextSceneTile = this.entities.sceneTransitions[n].nextSceneTile;
                         this.switchScenes = true;
-
                     }
                 }
             }
@@ -160,9 +158,9 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
     MapScene.prototype.display = function() {
         // draws the scene
         this.camera.display(this.cursor, this.entities);
-        this.camera.showString(this.entities["attacks"].length.toString(), 20);
-        if (this.entities["attacks"].length > 0) {
-            this.camera.showString(this.entities["attacks"][this.entities["attacks"].length-1].duration.toString(), 40);
+        this.camera.showString(this.entities["enemies"].length.toString(), 20);
+        if (this.entities["enemies"].length > 0) {
+            this.camera.showString(this.entities["enemies"][this.entities["enemies"].length-1].toDelete, 40);
         }
     }
 

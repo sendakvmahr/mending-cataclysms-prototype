@@ -17,6 +17,10 @@ function(Animation, Entity, Vector, goody, vars)
         this._spriteOffset = new Vector.Vector(-8, -80);
     }
 
+    Enemy.prototype.applyAttack = function(attack) {
+        this.toDelete = true;
+    }
+    
     Enemy.prototype.update = function(input, map, collisionHandler, timeDelta) {
         // if it hasn't done anything for a while make a projection, otherwise it just sits there
     }
@@ -24,6 +28,10 @@ function(Animation, Entity, Vector, goody, vars)
     Enemy.prototype.drawImage = function(ctx, offset) {
         var displayOffset = this.rect.position.add(offset);
         this._sprite.display(ctx, displayOffset.add(this._spriteOffset));
+
+        if (vars.debug) {
+           this.rect.draw(ctx, offset, "#FF0000");
+        }
     }
 
     return {
