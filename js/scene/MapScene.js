@@ -1,4 +1,4 @@
-define(["entities/EntityMaker", "scene/Script", "physics/Vector", "lib/goody", "scene/Scene", "map/Map" , "physics/CollisionHandler", "display/MapCamera", "assets/vars", "entities/Attack"],
+define(["entities/EntityMaker", "scene/Script", "physics/Vector", "lib/goody", "scene/Scene", "map/Map" , "physics/CollisionHandler", "display/MapCamera", "assets/vars", "entities/Attacks/Attack"],
 function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCamera, vars, Attack) 
 {    
     MapScene.prototype = new Scene.Scene();

@@ -1,4 +1,4 @@
-define(["display/Animation", "entities/PlayableEntity", "physics/Vector", "lib/goody", "assets/vars"],
+define(["display/Animation", "entities/Playable/PlayableEntity", "physics/Vector", "lib/goody", "assets/vars"],
 function(Animation, PlayableEntity, Vector, goody, vars)
 {    
     PlayableEntityFlorence.prototype = new PlayableEntity.PlayableEntity({"x":0, "y": 0});

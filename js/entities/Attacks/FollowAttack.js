@@ -1,4 +1,4 @@
-define(["display/Animation", "entities/Attack", "physics/Vector", "lib/goody", "assets/vars"],
+define(["display/Animation", "entities/Attacks/Attack", "physics/Vector", "lib/goody", "assets/vars"],
 function(Animation, Attack, Vector, goody, vars)
 {    
     FollowAttack.prototype = new Attack.Attack(
