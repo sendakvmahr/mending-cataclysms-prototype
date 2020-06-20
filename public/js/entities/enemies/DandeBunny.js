@@ -17,11 +17,16 @@ function(Animation, Enemy, Vector, goody, vars)
         this.rect.height = 27;
         this._spriteOffset = new Vector.Vector(-8, -40);
         this.moveTarget = new Vector.Vector(this.rect.position.x, this.rect.position.y);
+        this._spawnCountdownTotal = 1000;
+        this._spawnCountdown = 1000;
     }
 
     DandeBunny.prototype.applyAttack = function(attack) {
         this.toDelete = true;
     }
+
+
+
 
     DandeBunny.prototype.moveTowards = function(position, collisionHandler, timeDelta, map) {
         let direction = this.moveTarget.subtract(this.rect.position); 
@@ -37,6 +42,9 @@ function(Animation, Enemy, Vector, goody, vars)
         this.moveAxis("y", this.velocity.y * timeDelta/9, collisionHandler, map);
      
     }
+
+
+
     
     DandeBunny.prototype.update = function(mapScene, collisionHandler, timeDelta) {
         let target = this.moveTarget.subtract(this.rect.position);
@@ -44,6 +52,18 @@ function(Animation, Enemy, Vector, goody, vars)
             this.moveTarget = new Vector.Vector(goody.randint(0, mapScene.map.pixelWidth - this.rect.width), goody.randint(0, mapScene.map.pixelHeight - this.rect.height))
         }
         this.moveTowards(this.moveTarget, collisionHandler, timeDelta, mapScene.map);
+        this._spawnCountdown -= timeDelta;
+        if (this._spawnCountdown <= 0) {
+            this._spawnCountdown = this._spawnCountdownTotal;
+
+            let center = this.rect.center();
+            this.spawn.push(["FollowAttack", {
+                "position": center,
+                "owner" : this,
+                "direction" : "D"
+            }]);
+            this.spawning = true;
+        }
         // if it hasn't done anything for a while make a projection, otherwise it just sits there
 
     }

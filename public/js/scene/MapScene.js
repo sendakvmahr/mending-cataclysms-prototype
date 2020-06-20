@@ -109,6 +109,10 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
             this._spawnAttacks(this.entities["party"][p])
         }
 
+         for (let p=0; p < this.entities["enemies"].length; p++){
+            this._spawnAttacks(this.entities["enemies"][p])
+        }
+
         for (let i=0; i<this.entities.attacks.length; i++) {
             if (!this.entities.attacks[i].toDelete) {
                 if (!this.entities.attacks[i].isEnemyOwned()) {
