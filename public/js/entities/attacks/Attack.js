@@ -1,4 +1,4 @@
-define(["display/Animation", "entities/Entity", "physics/Vector", "lib/goody", "assets/vars", "entities/Playable/PlayableEntity"],
+define(["display/Animation", "entities/Entity", "physics/Vector", "lib/goody", "assets/vars", "entities/playable/PlayableEntity"],
 function(Animation, Entity, Vector, goody, vars, PlayableEntity)
 {    
     Attack.prototype = new Entity.Entity({"x":0, "y": 0});

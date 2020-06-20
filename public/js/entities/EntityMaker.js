@@ -3,13 +3,14 @@ define([
     'entities/Entity',
 	'entities/Cursor',
 	'entities/SceneTransitionEntity',
-	'entities/Playable/PlayableEntitySonna',
-	'entities/Playable/PlayableEntityFlorence',
-	'entities/Playable/PlayableEntityPharynx',
-	'entities/Playable/PlayableEntity',
-	'entities/Attacks/FollowAttack',
-	'entities/Attacks/Attack',
-	'entities/Enemies/Enemy'
+	'entities/playable/PlayableEntitySonna',
+	'entities/playable/PlayableEntityFlorence',
+	'entities/playable/PlayableEntityPharynx',
+	'entities/playable/PlayableEntity',
+	'entities/attacks/FollowAttack',
+	'entities/attacks/Attack',
+	'entities/enemies/DandeBunny',
+	'entities/enemies/Enemy'
     ],
 function(
     Entity,
@@ -21,6 +22,7 @@ function(
 	PlayableEntity,
 	FollowAttack,
 	Attack,
+	DandeBunny,
 	Enemy
     )
 {    
@@ -44,6 +46,8 @@ function(
             return new FollowAttack.FollowAttack(info);
         case "Attack":
             return new Attack.Attack(info);
+        case "DandeBunny":
+            return new DandeBunny.DandeBunny(info);
         case "Enemy":
             return new Enemy.Enemy(info);
 

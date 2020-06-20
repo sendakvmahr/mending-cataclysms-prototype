@@ -1,4 +1,4 @@
-define(["entities/EntityMaker", "scene/Script", "physics/Vector", "lib/goody", "scene/Scene", "map/Map" , "physics/CollisionHandler", "display/MapCamera", "assets/vars", "entities/Attacks/Attack"],
+define(["entities/EntityMaker", "scene/Script", "physics/Vector", "lib/goody", "scene/Scene", "map/Map" , "physics/CollisionHandler", "display/MapCamera", "assets/vars", "entities/attacks/Attack"],
 function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCamera, vars, Attack) 
 {    
     MapScene.prototype = new Scene.Scene();
@@ -69,7 +69,7 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         let toUpdate = ["enemies", "sceneTransitions", "attacks", "other"];
         for (let i=0; i < toUpdate.length; i++) {
             for (let n=0; n<this.entities[toUpdate[i]].length; n++) {
-                this.entities[toUpdate[i]][n].update(this.map, this.collisionHandler, delta);
+                this.entities[toUpdate[i]][n].update(this, this.collisionHandler, delta);
             }
         }
     }
@@ -160,7 +160,9 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         this.camera.display(this.cursor, this.entities);
         this.camera.showString(this.entities["enemies"].length.toString(), 20);
         if (this.entities["enemies"].length > 0) {
-            this.camera.showString(this.entities["enemies"][this.entities["enemies"].length-1].toDelete, 40);
+            let enemy = this.entities["enemies"][this.entities["enemies"].length-1];
+            this.camera.showString(enemy.rect.position.x.toString() + "," + enemy.rect.position.y.toString(), 40);
+            this.camera.showString(enemy.moveTarget.x.toString() + "," + enemy.moveTarget.y.toString(), 60);
         }
     }
 

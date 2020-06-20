@@ -51,7 +51,7 @@ function()
 				},
 				{
 					"id" : "104",
-					"spawn" : "Enemy"
+					"spawn" : "DandeBunny"
 				}
 			]
 		},
