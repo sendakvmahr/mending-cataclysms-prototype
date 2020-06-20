@@ -46,8 +46,8 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         }
         for (let i=0; i< this.map.events.sceneTransition.length; i++) { 
             let entityInfo = this.map.events.sceneTransition[i];
-            entityInfo["x"] = this.map.events.sceneTransition.x;
-            entityInfo["y"] = this.map.events.sceneTransition.y;
+            entityInfo["x"] = parseInt(this.map.events.sceneTransition[i].x);
+            entityInfo["y"] = parseInt(this.map.events.sceneTransition[i].y);
             let entity = EntityMaker('SceneTransitionEntity', entityInfo);
             this.entities['sceneTransitions'].push(entity);
         }
@@ -170,7 +170,7 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         let result = {
             "inputAffected": this.inputAffected,
             "cameraFollow" : this.cameraFollow,
-            "party": this.party,
+            "party": this.entities.party,
             "spawnTile": this.nextSceneTile 
         };
         return result;
