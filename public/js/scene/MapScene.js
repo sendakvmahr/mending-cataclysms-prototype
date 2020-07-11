@@ -29,6 +29,7 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         this.camera.assignEnity(this.entities["party"][this.inputAffected]);
         this._changing = false;
         this.switchScenes = false;
+        this.partyStatusChanged = false;
     }
 
     MapScene.prototype.loadEntities = function() {
