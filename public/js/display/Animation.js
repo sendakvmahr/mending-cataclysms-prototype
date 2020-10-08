@@ -35,9 +35,10 @@ function(Vector, goody, vars)
         }
     }
     
-    Animation.prototype.display = function(ctx, offset){
+    Animation.prototype.display = function(ctx, offset, flicker=false){
         offset = this.offset.add(offset);
         // Draws the current sprite
+        if (flicker) { ctx.globalCompositeOperation = "xor"; }
         ctx.drawImage(   
             this._image,                                                      //image
             this._imageOffset.x,                                              //x position on image
@@ -49,6 +50,7 @@ function(Vector, goody, vars)
             this.width,                                                 //imageWidth on Canvas
             this.height                                                 //imageHeight on Canvas                
         )
+        if (flicker) { ctx.globalCompositeOperation = "source-over"; }
     }
 
     return {

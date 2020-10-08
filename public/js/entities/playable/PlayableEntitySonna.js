@@ -14,15 +14,16 @@ function(Animation, PlayableEntity, Vector, goody, vars)
         this._status = "idle";
         // HERE FOR REFERENCE FOR LATER
         this._sprites = {
-            "walking" : new Animation.Animation(images["sonna_walk"], 4, 36, 96, 150, -8, -60),
-            "idle" : new Animation.Animation(images["sonna_idle"], 2, 36, 96, 300, -8, -60)
+            "walking" : new Animation.Animation(images["sonna_walk"], 4, 36, 96, 150, -5, -35),
+            "idle" : new Animation.Animation(images["sonna_idle"], 2, 36, 96, 300, -5, -35)
         }
         this._sprite = this._sprites["idle"];
         //this._shadowSprite = new Animation.Animation(images.MCshadow, 1, 20, 8);
 
-        this.rect.width = 21;
-        this.rect.height = 27;
+        this.rect.width = 30;
+        this.rect.height = 50;
         this.initiated = true;
+        this.health = 100;
     }
     
     PlayableEntitySonna.prototype.inputUpdate = function(input, map, collisionHandler, timeDelta) {

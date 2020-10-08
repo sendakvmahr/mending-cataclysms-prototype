@@ -21,6 +21,10 @@ function(Animation, Entity, Vector, goody, vars, PlayableEntity)
 
         this.rect.width = 5;
         this.rect.height = 5;
+        this.calculations = {
+            "power": 5,
+            "element": "none"
+        }
     }
 
     Attack.prototype.update = function(map, collisionHandler, timeDelta) {
@@ -62,10 +66,11 @@ function(Animation, Entity, Vector, goody, vars, PlayableEntity)
     }
 
     Attack.prototype.isEnemyOwned = function() {
-        return !this.owner instanceof PlayableEntity.PlayableEntity;
+        return this.owner.isEnemy;
     }
 
-    Attack.prototype.onHit = function() {
+    Attack.prototype.onHit = function(entity) {
+        this.toDelete = true;
     }
 
     Attack.prototype.moveBack = function(isXaxis, distance, newTile, map){

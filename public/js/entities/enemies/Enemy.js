@@ -16,6 +16,8 @@ function(Animation, Entity, Vector, vars, goody)
         this.rect.width = 21;
         this.rect.height = 27;
         this._spriteOffset = new Vector.Vector(-8, -80);
+        this.health = 10;
+        this.flicker = 0;
     }
 
     Enemy.prototype.applyAttack = function(attack) {
@@ -69,10 +71,18 @@ function(Animation, Entity, Vector, vars, goody)
 
     Enemy.prototype.drawImage = function(ctx, offset) {
         var displayOffset = this.rect.position.add(offset);
-        this._sprite.display(ctx, displayOffset.add(this._spriteOffset));
-
+        this._sprite.display(ctx, displayOffset.add(this._spriteOffset), (this.flicker>0));
+        this.flicker -= 1;
         if (vars.debug) {
-           this.rect.draw(ctx, offset, "#FF0000");
+           this.rect.draw(ctx, offset, "#FF000070");
+        }
+    }
+
+    Enemy.prototype.applyAttack = function(attack){
+        this.health -= attack.calculations.power;
+        this.flicker = vars.flickerLength;
+        if (this.health <= 0) {
+            this.toDelete = true;
         }
     }
 

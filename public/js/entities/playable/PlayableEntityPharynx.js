@@ -23,6 +23,7 @@ function(Animation, PlayableEntity, Vector, goody, vars)
         this.rect.width = 21;
         this.rect.height = 27;
         this.initiated = true;
+        this.health = 150;
     }
 
     PlayableEntityPharynx.prototype.inputUpdate = function(input, map, collisionHandler, timeDelta) {

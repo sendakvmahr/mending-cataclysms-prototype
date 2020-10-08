@@ -23,5 +23,6 @@ function()
         interval: 1000/fps,
         directions: directions,
         debug: true,
+        flickerLength: 2
     }
 });

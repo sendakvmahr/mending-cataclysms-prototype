@@ -21,14 +21,8 @@ function(Animation, Enemy, Vector, goody, vars)
         this._spawnCountdown = 1000;
     }
 
-    DandeBunny.prototype.applyAttack = function(attack) {
-        this.toDelete = true;
-    }
-
-
-
-
     DandeBunny.prototype.moveTowards = function(position, collisionHandler, timeDelta, map) {
+        /*
         let direction = this.moveTarget.subtract(this.rect.position); 
         
         if (direction.length() < this._velCap) {
@@ -40,6 +34,7 @@ function(Animation, Enemy, Vector, goody, vars)
 
         this.moveAxis("x", this.velocity.x * timeDelta/9, collisionHandler, map);
         this.moveAxis("y", this.velocity.y * timeDelta/9, collisionHandler, map);
+        */
      
     }
 

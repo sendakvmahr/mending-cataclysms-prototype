@@ -1,3 +1,6 @@
+/*
+*  Attack that follows the parent entity that spawned the attack
+*/
 define(["display/Animation", "entities/attacks/Attack", "physics/Vector", "lib/goody", "assets/vars"],
 function(Animation, Attack, Vector, goody, vars)
 {    
@@ -16,8 +19,8 @@ function(Animation, Attack, Vector, goody, vars)
         //this._sprite = new Animation.Animation(images.MC, 1, 24, 48);
         //this._shadowSprite = new Animation.Animation(images.MCshadow, 1, 20, 8);
         this.ownerPosition = this.owner.rect.center();
-        this.rect.width = 20;
-        this.rect.height = 20;
+        this.rect.width = 40;
+        this.rect.height = 40;
         this.duration = 200;
 
         let offset = "";
@@ -31,6 +34,7 @@ function(Animation, Attack, Vector, goody, vars)
             offset = new Vector.Vector(-60, Math.floor(-this.rect.height/2));
         }
         this.rect.position = this.rect.position.add(offset);
+        this.ignore = [];
     }
 
     FollowAttack.prototype.update = function(map, collisionHandler, timeDelta) {
@@ -40,7 +44,10 @@ function(Animation, Attack, Vector, goody, vars)
         this.duration -= timeDelta;
         this.toDelete = this.duration <= 0;
     }
-
+    FollowAttack.prototype.onHit = function(entity) {
+        //this.toDelete = true;
+        this.ignore.push(entity);
+    }
     FollowAttack.prototype.drawImage = function(ctx, offset) {
         this.rect.draw(ctx, offset, "#FFFFFF");
     }

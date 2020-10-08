@@ -19,8 +19,10 @@ function(Animation, Entity, Vector, goody, vars)
         this._sprite = this._sprites["idle"];
         //this._shadowSprite = new Animation.Animation(images.MCshadow, 1, 20, 8);
 
-        this.rect.width = 21;
-        this.rect.height = 27;
+        this.rect.width = 35;
+        this.rect.height = 38;
+        this.health = 100;
+        this.flicker = 0;
     }
 
     PlayableEntity.prototype.setSpriteStatus = function(status) {
@@ -90,9 +92,10 @@ function(Animation, Entity, Vector, goody, vars)
     }
     PlayableEntity.prototype.drawImage = function(ctx, offset) {
         let displayOffset = this.rect.position.add(offset);
-        this._sprite.display(ctx, displayOffset);
+        this._sprite.display(ctx, displayOffset, (this.flicker>0));
+        this.flicker -= 1;
         if (vars.debug) {
-           this.rect.draw(ctx, offset, "#00FF00");
+           this.rect.draw(ctx, offset, "#00FF0070");
         }
     }
     
@@ -148,6 +151,12 @@ function(Animation, Entity, Vector, goody, vars)
         else {
             this.rect.setTop(map.tileToPixel(newTile).y+vars.tileDimension+1);
         } 
+    }
+
+
+    PlayableEntity.prototype.applyAttack = function(attack){
+        this.health -= attack.calculations.power;
+        this.flicker = vars.flickerLength;
     }
     
     return {

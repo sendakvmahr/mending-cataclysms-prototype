@@ -88,10 +88,7 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         } 
     }
 
-
-    MapScene.prototype.update = function(input, delta) {
-        // Updates input affected entity with a set of inputs
-        this.updateEntites(delta);
+    MapScene.prototype._handleControlSwitches = function(input, delta) {
         if (input.change) {
             if (!this._changing) {
                 this._changing = true;
@@ -101,6 +98,9 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
         } else {
             this._changing = false;
         }
+    }
+
+    MapScene.prototype._generateAttacks = function(input, delta) {
         for (let p=0; p < this.entities["party"].length; p++){
             if (this.inputAffected == p) {
                 this.entities["party"][this.inputAffected].inputUpdate(input, this.map, this.collisionHandler, delta)
@@ -109,27 +109,38 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
             }
             this._spawnAttacks(this.entities["party"][p])
         }
-
          for (let p=0; p < this.entities["enemies"].length; p++){
             this._spawnAttacks(this.entities["enemies"][p])
         }
+    }
+    MapScene.prototype.update = function(input, delta) {
+        // Updates input affected entity with a set of inputs
+        this.updateEntites(delta);
+        this._handleControlSwitches(input, delta);
+        this._generateAttacks(input, delta)
+
 
         for (let i=0; i<this.entities.attacks.length; i++) {
             if (!this.entities.attacks[i].toDelete) {
-                if (!this.entities.attacks[i].isEnemyOwned()) {
-                    for (let n=0; n<this.entities.enemies.length; n++) {
-                        if (this.collisionHandler.collidingObjects(this.entities.attacks[i], this.entities.enemies[n])) {
-                            this.entities.attacks[i].onHit();
-                            this.entities.enemies[n].applyAttack(this.entities.attacks[i]);
+                let attackEnt = this.entities.attacks[i];
+                if (attackEnt.isEnemyOwned()) {
+                    for (let n=0; n<this.entities["party"].length; n++) {
+                        let partyMem = this.entities["party"][n];
+                        if (this.collisionHandler.collidingObjects(attackEnt, partyMem) &&
+                            !attackEnt.ignore.includes(partyMem))  {
+                            this.entities.attacks[i].onHit(partyMem); /// if and whne this changes to attacks, some attacks may pierece/AOE
+                            this.entities["party"][n].applyAttack(attackEnt);
                         }
                     }
                 }
                 else {
-                    // check against enemies and players
-                    for (let n=0; n<this.entities["party"].length; n++) {
-                        if (this.collisionHandler.collidingObjects(this.entities.attacks[i], this.entities["party"][n])) {
-                            //this.attacks[i].toDelete = true; /// if and whne this changes to attacks, some attacks may pierece/AOE
-                            //this.party[n].collide(this.attacks[i]);
+                    // check against enemies
+                    for (let n=0; n<this.entities.enemies.length; n++) {
+                        let enemyEnt = this.entities.enemies[n];
+                        if (this.collisionHandler.collidingObjects(attackEnt, enemyEnt) &&
+                            !attackEnt.ignore.includes(enemyEnt)) {
+                            this.entities.attacks[i].onHit(enemyEnt);
+                            this.entities.enemies[n].applyAttack(attackEnt);
                         }
                     }
                 }
@@ -163,12 +174,15 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
     MapScene.prototype.display = function() {
         // draws the scene
         this.camera.display(this.cursor, this.entities);
+        // this should really be overlay camera
         this.camera.showString(this.entities["enemies"].length.toString(), 20);
         if (this.entities["enemies"].length > 0) {
             let enemy = this.entities["enemies"][this.entities["enemies"].length-1];
-            this.camera.showString(enemy.rect.position.x.toString() + "," + enemy.rect.position.y.toString(), 40);
-            this.camera.showString(enemy.moveTarget.x.toString() + "," + enemy.moveTarget.y.toString(), 60);
+            this.camera.showString(enemy.health, 40);
         }
+        this.camera.showString(this.entities["party"][0].health, 60);
+        this.camera.showString(this.entities["party"][1].health, 80);
+        this.camera.showString(this.entities["party"][2].health, 100);
     }
 
     MapScene.prototype.continuationInfo = function() {
