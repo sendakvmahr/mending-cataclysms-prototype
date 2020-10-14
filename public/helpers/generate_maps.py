@@ -115,7 +115,10 @@ def generate_single_map(filename):
 def generate_map_files(levels):
     maps = ""
     for level in levels:
-        maps += generate_single_map(level) + ",\n"
+        level_name = level.split("/")[-1]
+        to_skip = level_name[0] == "_" or level_name.split(".")[-1] != ".tmx"
+        if not to_skip:
+            maps += generate_single_map(level) + ",\n"
     file = open("maps.js", "w")
     file.write(MAP_FILE_BASE.format(maps=maps))
     file.close()

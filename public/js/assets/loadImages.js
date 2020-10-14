@@ -16,6 +16,7 @@ let imageNames = [
 	'Pharyncx-export',
 	'BaseTiles',
 	'MC',
+	'everything',
 	'dragonfly',
 	'Florence',
 	'pharynx_walk',

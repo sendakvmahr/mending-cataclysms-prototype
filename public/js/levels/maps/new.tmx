@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.5" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="24" tileheight="24" infinite="0" nextlayerid="11" nextobjectid="9">
+<map version="1.2" tiledversion="1.2.5" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="24" tileheight="24" infinite="0" nextlayerid="11" nextobjectid="11">
  <tileset firstgid="1" source="../tilesets/PharHome.tsx"/>
  <layer id="3" name="Map1" width="40" height="40">
   <data encoding="csv">
@@ -142,6 +142,11 @@
   </object>
   <object id="7" name="defaultSpawn" x="506" y="367">
    <point/>
+  </object>
+  <object id="9" name="startCutscene" x="436" y="480" width="48" height="48">
+   <properties>
+    <property name="cutscene" value="democutscene"/>
+   </properties>
   </object>
  </objectgroup>
  <layer id="4" name="Collision" width="40" height="40" visible="0">
