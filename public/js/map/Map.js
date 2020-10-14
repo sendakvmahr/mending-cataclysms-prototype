@@ -30,7 +30,8 @@ function(goody, Vector, vars)
         this.objects = [];
         this.events = {
             'sceneTransition' :[],
-            'defaultSpawn' :[]
+            'defaultSpawn' :[],
+            'startCutscene': []
         };
         for (let i=0; i < json.events.length; i++) {
             this.events[json.events[i].name].push(json.events[i]);

@@ -3,6 +3,7 @@ define([
     'entities/Entity',
 	'entities/Cursor',
 	'entities/SceneTransitionEntity',
+	'entities/CutsceneEntity',
 	'entities/playable/PlayableEntitySonna',
 	'entities/playable/PlayableEntityFlorence',
 	'entities/playable/PlayableEntityPharynx',
@@ -16,6 +17,7 @@ function(
     Entity,
 	Cursor,
 	SceneTransitionEntity,
+	CutsceneEntity,
 	PlayableEntitySonna,
 	PlayableEntityFlorence,
 	PlayableEntityPharynx,
@@ -34,6 +36,8 @@ function(
             return new Cursor.Cursor(info);
         case "SceneTransitionEntity":
             return new SceneTransitionEntity.SceneTransitionEntity(info);
+        case "CutsceneEntity":
+            return new CutsceneEntity.CutsceneEntity(info);
         case "PlayableEntitySonna":
             return new PlayableEntitySonna.PlayableEntitySonna(info);
         case "PlayableEntityFlorence":

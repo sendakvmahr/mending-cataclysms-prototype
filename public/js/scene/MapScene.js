@@ -10,7 +10,8 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
             "enemies": [],
             "sceneTransitions": [],
             "attacks": [],
-            "other": []
+            "other": [],
+            "cutscenes" : []
         }
         if (continuationInfo) {
             // for mapscenes, assume camera follows inputAffected
@@ -52,6 +53,14 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
             let entity = EntityMaker('SceneTransitionEntity', entityInfo);
             this.entities['sceneTransitions'].push(entity);
         }
+        for (let i=0; i< this.map.events.startCutscene.length; i++) { 
+            let entityInfo = this.map.events.startCutscene[i];
+            entityInfo["x"] = parseInt(this.map.events.startCutscene[i].x);
+            entityInfo["y"] = parseInt(this.map.events.startCutscene[i].y);
+            let entity = EntityMaker('CutsceneEntity', entityInfo);
+            this.entities['cutscenes'].push(entity);
+        }
+
         if (this.spawnTile === undefined) { // use the default spawnpoint if it's not from a previous room
             let position = new Vector.Vector(parseInt(this.map.events.defaultSpawn[0].x), parseInt(this.map.events.defaultSpawn[0].y))
             for (let i=0; i<vars.partyList.length; i++) {
@@ -154,6 +163,17 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
                         this.nextScene = this.entities.sceneTransitions[n].nextScene;
                         this.nextSceneTile = this.entities.sceneTransitions[n].nextSceneTile;
                         this.switchScenes = true;
+                    }
+                }
+                for (let n=0; n<this.entities.cutscenes.length; n++) {
+                    let scene = this.entities.cutscenes[n];
+                    if (!scene.triggered) {
+                        if (this.collisionHandler.collidingObjects(this.entities["party"][i], scene)) {
+                            scene.triggered = true;
+                            this.nextScene = this.entities.cutscenes[n].nextScene;
+                            this.nextSceneTile = "none";
+                            this.switchScenes = true;
+                        }
                     }
                 }
             }

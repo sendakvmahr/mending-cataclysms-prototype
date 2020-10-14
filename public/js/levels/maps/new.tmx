@@ -145,7 +145,7 @@
   </object>
   <object id="9" name="startCutscene" x="436" y="480" width="48" height="48">
    <properties>
-    <property name="cutscene" value="democutscene"/>
+    <property name="cutscene" value="sample"/>
    </properties>
   </object>
  </objectgroup>

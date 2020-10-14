@@ -7,7 +7,7 @@ function(goody, vars)
     function Script(json) {   
         // testing locally and chrome is annoying with files when that happens
 json = {
-"map": "map",
+"map": "new",
 "characters": {
     "flo" : {
         "joking": ["flo pose neutral.png", "flo mouth happy.png", "flo eyes side.png"],

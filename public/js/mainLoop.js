@@ -1,5 +1,5 @@
-define(["physics/Vector", "input/Button", "scene/MenuScene", "scene/MapScene", "input/InputHandler","lib/goody", "display/MapCamera", "levels/maps", "assets/vars", "map/Map", "physics/CollisionHandler", "scene/CutScene", "levels/tilesets"],
-function(Vector, Button, MenuScene, MapScene, InputHandler, goody, MapCamera, maps, vars, Map, CollisionHandler, CutScene, Tilesets)
+define(["physics/Vector", "input/Button", "scene/MenuScene", "scene/MapScene","levels/cutscenes", "input/InputHandler","lib/goody", "display/MapCamera", "levels/maps", "assets/vars", "map/Map", "physics/CollisionHandler", "scene/Cutscene", "levels/tilesets"],
+function(Vector, Button, MenuScene, MapScene, cutscenes, InputHandler, goody, MapCamera, maps, vars, Map, CollisionHandler, Cutscene, Tilesets )
 {
     function mainLoop() {
         this.canvas = document.getElementById('canvas');
@@ -40,10 +40,18 @@ function(Vector, Button, MenuScene, MapScene, InputHandler, goody, MapCamera, ma
     
     mainLoop.prototype.update = function(delta) {
         if (this.scene.switchScenes) {
-            this.scene = new MapScene.MapScene(this.ctx, 
-                maps[this.scene.nextScene], 
-                Tilesets, 
-                this.scene.continuationInfo());
+            if (this.scene.nextSceneTile === "none") {
+                // is a cutscene
+                this.scene = new Cutscene.Cutscene(this.ctx, 
+                    cutscenes[this.scene.nextScene], 
+                    Tilesets);
+                debugger
+            } else {
+                this.scene = new MapScene.MapScene(this.ctx, 
+                    maps[this.scene.nextScene], 
+                    Tilesets, 
+                    this.scene.continuationInfo());
+            }
         }
         this.scene.update(this.input, delta);
     };
