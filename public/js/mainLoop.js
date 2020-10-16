@@ -44,8 +44,8 @@ function(Vector, Button, MenuScene, MapScene, cutscenes, InputHandler, goody, Ma
                 // is a cutscene
                 this.scene = new Cutscene.Cutscene(this.ctx, 
                     cutscenes[this.scene.nextScene], 
-                    Tilesets);
-                debugger
+                    Tilesets,
+                    this.scene.continuationInfo());
             } else {
                 this.scene = new MapScene.MapScene(this.ctx, 
                     maps[this.scene.nextScene], 

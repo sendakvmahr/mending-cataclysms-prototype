@@ -83,7 +83,67 @@ function(Vector, goody, vars)
         this._ctx.fillText(string, 10, y);
     }
 
-    MapCamera.prototype.display = function(cursor, objects) {
+
+    MapCamera.prototype.displayText = function(string, images, onBottom) {
+        //height is static 75 for now, broder is static 5. 
+        this._ctx.fillStyle = "#000000";
+        this._ctx.fillRect(0, vars.displayHeight-80, vars.displayWidth, 75+5);
+
+        this._ctx.fillStyle = "#001133";
+        this._ctx.fillRect(5, vars.displayHeight-75, vars.displayWidth-10, 75 - 5);
+
+        this._ctx.fillStyle = "#FFFFFF";
+        let lines = this._cutLine(string) 
+        for (l in lines){
+            this._ctx.fillText(lines[l], 10, vars.displayHeight-50 + l * 25);
+        }
+        this._showPortrait(images, onBottom);
+    }
+
+    MapCamera.prototype._showPortrait = function(images, onBottom){
+        for (imgIndex in images){
+            let image = images[imgIndex];
+            // 80 is current textbox height
+            this._ctx.drawImage(   
+                image,                                                      //image
+                0,                                              //x position on image
+                0,                                              //y position on image
+                image.width,                                                 //imageWidth on Source
+                image.height,                                                //imageHeight on Source
+                vars.displayWidth - image.width*2,                                                   //xPosCanvas    
+                vars.displayHeight - image.height*2 - 80,                                                   //yPosCanvas, integer offsets are for centering  
+                image.width*2,                                                 //imageWidth on Canvas
+                image.height*2                                                 //imageHeight on Canvas                
+            )
+        }
+
+    } 
+
+    MapCamera.prototype._cutLine = function(string, maxChar) {
+        // cuts text into length appopriate strings to render
+        maxChar = goody.optional(maxChar, 65);
+        if (string.length >= maxChar) {  // counted and estimated
+            let lines = [];
+                line = [];
+                words = string.split(" ").map(x => (x +""));
+                charCount = 0;
+            for (wi in words) {
+                let w = words[wi];
+                if (charCount + w.length >= maxChar) {
+                    lines.push(line.join(" "));
+                    line = [w.trim()];
+                    charCount = 0;
+                } else {
+                    charCount += w.length;
+                    line.push(w.trim());
+                }
+            }
+            lines.push(line.join(" "));
+            return lines;
+        } return [string];
+    }
+
+    MapCamera.prototype.display = function(objects) {
         // Displays the map and Entity objects on top. 
         this._calcOffset();
         let bufferLength = this._buffer.length;

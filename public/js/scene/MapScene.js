@@ -193,7 +193,7 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
 
     MapScene.prototype.display = function() {
         // draws the scene
-        this.camera.display(this.cursor, this.entities);
+        this.camera.display(this.entities);
         // this should really be overlay camera
         this.camera.showString(this.entities["enemies"].length.toString(), 20);
         if (this.entities["enemies"].length > 0) {
@@ -210,7 +210,8 @@ function(EntityMaker, Script, Vector, goody, Scene, Map, CollisionHandler, MapCa
             "inputAffected": this.inputAffected,
             "cameraFollow" : this.cameraFollow,
             "party": this.entities.party,
-            "spawnTile": this.nextSceneTile 
+            "spawnTile": this.nextSceneTile,
+            "map": this.map
         };
         return result;
     }

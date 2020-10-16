@@ -1,64 +1,77 @@
-define(["scene/Script", "physics/Vector", "lib/goody", "scene/Scene", "map/Map" , "entities/Cursor", "physics/CollisionHandler", "display/MapCamera", "entities/Entity"],
-function(Script, Vector, goody, Scene, Map, Cursor, CollisionHandler, MapCamera, Entity) 
+define(["levels/maps", "scene/Script", "physics/Vector", "lib/goody", "scene/Scene", "map/Map" , "entities/Cursor", "physics/CollisionHandler", "display/MapCamera", "entities/Entity"],
+function(maps, Script, Vector, goody, Scene, Map, Cursor, CollisionHandler, MapCamera, Entity) 
 {    
     Cutscene.prototype = new Scene.Scene();
     Cutscene.prototype.constructor = Cutscene;
 
 
-    function Cutscene(ctx, info, tilesets) {
+    function Cutscene(ctx, info, tilesets, continuation) {
         //load map, positions, and dialogue from the file
         /* things to put in the Cutscene
         */
-        console.log(info)
-        /*
-        this.map = new Map.Map(map); 
-        this.cursor = new Cursor.Cursor();
-        this.cameraFollow = new Entity.Entity(0, 0);
-        this._textbox = document.getElementById("text");
-        var objects = this.map.objects;
-        for (var i = 0; i < objects.length; i++) {
-            if (objects[i].name === "MCSpawn") {
-                this.cameraFollow.setPosition(objects[i].x, objects[i].y);
-            }
+        // placeholder for now
+
+info = {
+"map": "new",
+"characters": {
+    "flo" : {
+        "joking": ["flo pose neutral", "flo mouth happy", "flo eyes side"],
+        "annoyed": ["flo pose neutral", "flo mouth happy", "flo eyes neutral"]
+     }
+},
+"mapChars":  {"flo": [10, 10] },
+"script": 
+`
+say flo annoyed:What? Thirty eyes ruined, thirty eyes given. That sounds like a fair payment, doesn't it?
+move while flo 60,60 
+say flo joking:Hmph.
+`
+}
+
+        this.camera = new MapCamera.MapCamera(ctx);
+        let mapName = info.map;
+        this.map = mapName == continuation.map.name ? continuation.map : new Map.Map(maps[mapName], tilesets)
+        this.cameraFollow = continuation.cameraFollow;
+        this.inputAffected = continuation.inputAffected;
+        this.entities = {
+            "party": continuation.party,
+            "enemies": [],
+            "sceneTransitions": [],
+            "attacks": [],
+            "other": [],
+            "cutscenes" : []
         }
-        this.loadEntities();
-        this.collisionHandler = new CollisionHandler.CollisionHandler();
+
         this.camera = new MapCamera.MapCamera(ctx);
         this.camera.loadMap(this.map);
+        this.camera.assignEnity(this.entities["party"][this.inputAffected]);
+
+        this.switchScenes = false;
         this.script = new Script.Script(info);
-        this._displayedText = "";
-        this._character = [document.getElementById("portrait"), document.getElementById("mouth"), document.getElementById("eyes")];  
-        */
+        this._displayedText = ""
+        this._character = [];
     }
-/* sort through this later
+
     Cutscene.prototype.loadEntities = function() {
-        this._entities = this.map.objects;
     }
 
     Cutscene.prototype.update = function(input, delta) {
-        this.cursor.update(input);
+        //this.cursor.update(input);
         this.script.update(delta);
     }
 
     Cutscene.prototype.click = function(mousePosition) {
-        this.script.click(mousePosition);
     }
 
     Cutscene.prototype.rightClick = function(mousePosition) {
     }
 
-    Cutscene.prototype.showText = function() {
-        if (this.script.state === "say") {
-            this._textbox.innerHTML = this._displayedText;
-            var images = this.script.getPortrait();
-            this._character[0].src = images[0];
-            this._character[1].src = images[1];
-            this._character[2].src = images[2];
-        }
-    }
-
-
     Cutscene.prototype.display = function() {
+        this.camera.display(this.entities);
+        if (this.script.line !== ""){
+            this.camera.displayText(this.script.line, this.script.getPortraitImages());
+        }
+        /*
         this.camera.display(this.cameraFollow, this.cursor, []);
         //this.script.display(this.camera._ctx);//!!
         if (this.script.line !== this._displayedText) {
@@ -71,7 +84,8 @@ function(Script, Vector, goody, Scene, Map, Cursor, CollisionHandler, MapCamera,
             var char = this.script.characters[keys[charInd]];
             this.camera._ctx.rect(char[0], char[1], 24, 48);
             this.camera._ctx.fill();
-        }
+        }*/
+
     }
 
     Cutscene.prototype.nextScene = function() {
@@ -80,7 +94,7 @@ function(Script, Vector, goody, Scene, Map, Cursor, CollisionHandler, MapCamera,
             throw new Error("switchScenes is false");
         }
     }
-    */
+    
     return {
         Cutscene: Cutscene
     };

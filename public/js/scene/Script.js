@@ -5,25 +5,9 @@ define(["lib/goody", "assets/vars"],
 function(goody, vars)
 {    
     function Script(json) {   
-        // testing locally and chrome is annoying with files when that happens
-json = {
-"map": "new",
-"characters": {
-    "flo" : {
-        "joking": ["flo pose neutral.png", "flo mouth happy.png", "flo eyes side.png"],
-        "annoyed": ["flo pose neutral.png", "flo mouth happy.png", "flo eyes neutral.png"]
-     }
-},
-"mapChars":  {"flo": [10, 10] },
-"script": 
-`
-say flo annoyed:What? Thirty eyes ruined, thirty eyes given. That sounds like a fair payment, doesn't it?
-move while flo 60,60 
-say flo joking:Hmph.
-`
-        }
         json.script = json.script.split("\n");
         this.json = json;
+        this.line = "";
         this.index = 0;
         this.state = [];
         this.nextLine();
@@ -44,17 +28,17 @@ say flo joking:Hmph.
         }
     }
     
-    Script.prototype.getPortrait = function() {
+    Script.prototype.getPortraitImages = function() {
         if (this.instruction !== "") {
-        var chr = this.instruction[1];
-        var mood = this.instruction[2];
-        var prefix = "./images/portrait_composites/" + chr + "/";
-        var files = this.json["characters"][chr][mood];
-        var result = [];
-        for (var i=0; i<files.length; i++) {
-            result.push(prefix + files[i])
-        }
-        return result;
+            let chr = this.instruction[1],
+                mood = this.instruction[2];
+                prefix = "portrait_composites/" + chr + "/";
+                files = this.json["characters"][chr][mood];
+                result = [];
+            for (var i=0; i<files.length; i++) {
+                result.push(images[prefix + files[i]])
+            }
+            return result;
         }
         return ["", "", ""];    
 

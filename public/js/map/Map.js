@@ -2,6 +2,7 @@ define(["lib/goody", "physics/Vector", "assets/vars"],
 function(goody, Vector, vars)
 {    
     function Map(json, tilesets) {
+        this.name = json.name
         // dimensions of the map in tiles
         this.height = parseInt(json.height);
         this.width = parseInt(json.width);
