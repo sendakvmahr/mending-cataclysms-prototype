@@ -23,9 +23,9 @@ info = {
 "script": 
 `
 say flo annoyed:What? Thirty eyes ruined, thirty eyes given. That sounds like a fair payment, doesn't it?
-move while flo 60,60 
 say flo joking:Hmph.
 `
+//move while flo 60,60 
 }
 
         this.camera = new MapCamera.MapCamera(ctx);
@@ -50,6 +50,7 @@ say flo joking:Hmph.
         this.script = new Script.Script(info);
         this._displayedText = ""
         this._character = [];
+        this._changing = false;
     }
 
     Cutscene.prototype.loadEntities = function() {
@@ -57,6 +58,14 @@ say flo joking:Hmph.
 
     Cutscene.prototype.update = function(input, delta) {
         //this.cursor.update(input);
+        if (input.space) {
+            if (!this._changing) {
+                this.script.nextLine();
+                this._changing = true;
+            } 
+        } else {
+            this._changing = false;
+        }
         this.script.update(delta);
     }
 

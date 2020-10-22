@@ -23,7 +23,6 @@ function(goody, vars)
                 var char = this.instruction[2];
                 var coordinate = this.instruction[3].split(",");
                 coordinate = [parseInt(coordinate[0]), parseInt(coordinate[1])];
-                console.log(coordinate);
                 this.characters[char] = coordinate;
         }
     }
@@ -51,13 +50,6 @@ function(goody, vars)
         this.line = line[1];
         this.update();
     }
-
-    Script.prototype.click = function(mousePosition) {
-        if (this.instruction[0] === "say") {
-            this.nextLine();
-        }
-    }
-
     
     return {
         Script:Script
